@@ -1,0 +1,4 @@
+discordBot:
+  enable: true
+  serverToken: "test-token"
+  channelId: "12233525466224562"

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "mt-show-items",
+  "version": "${version}",
+  "name": "ShowItmes",
+  "description": "Show your items to friends!",
+  "authors": [
+    "Maisy Tse"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MIT License",
+  "icon": "assets/mt/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.maisyt.showItems.ShowItemsMod"
+    ],
+    "client": [
+    ]
+  },
+  "mixins": [
+    "show-items-fabric-1.19.3.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric-api": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
