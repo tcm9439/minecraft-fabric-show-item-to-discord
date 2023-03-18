@@ -25,12 +25,12 @@ public class ShowItemDiscordBot {
     }
 
     public ShowItemDiscordBot(){
-        client = gatewayDiscordClient(token);
         channelID = ShowItemConfigLoader.getModConfig().getDiscordBot().getSnowflakeChannelId();
         token = ShowItemConfigLoader.getModConfig().getDiscordBot().getServerToken();
+        client = createGatewayDiscordClient(token);
     }
 
-    public static GatewayDiscordClient gatewayDiscordClient(String token) {
+    public static GatewayDiscordClient createGatewayDiscordClient(String token) {
         return DiscordClientBuilder.create(token).build()
                 .login()
                 .block();

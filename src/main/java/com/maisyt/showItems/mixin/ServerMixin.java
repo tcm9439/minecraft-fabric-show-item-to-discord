@@ -17,17 +17,19 @@ import java.nio.file.Path;
  */
 @Mixin(MinecraftServer.class)
 public abstract class ServerMixin {
-//    @SuppressWarnings("deprecation")
     @Inject(at = @At("TAIL"), method = "<init>")
     public void onStartServer(CallbackInfo info) {
         ShowItemsMod.LOGGER.info("[ShowItems-mixin] Minecraft server init.");
         // TODO test load config
         Path configPath = PathUtil.getGlobalConfigDirectory().resolve("ShowItems/show-items-config.yaml");
         ShowItemConfigLoader.loadConfig(configPath);
+
+        ShowItemDiscordBot.createBot();
+        ShowItemDiscordBot.getInstance().sendTestMsgToDiscord("Mod init!");
     }
 
-    @Inject(at = @At("HEAD"), method = "shutdown")
-    public void onServerStop(CallbackInfo info) {
+    @Inject(method = "shutdown", at = @At("TAIL"))
+    private void onServerStop(CallbackInfo ci) {
         ShowItemsMod.LOGGER.info("[ShowItems-mixin] Minecraft server stop.");
         // TODO disconnect discord bot if connected
         ShowItemDiscordBot.getInstance().disconnect();

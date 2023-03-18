@@ -5,6 +5,7 @@ import com.maisyt.showItems.core.SendShowItemChat;
 import com.maisyt.showItems.core.ShowItemMsgType;
 import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public interface OnChatMsgMixin {
     @Inject(method = "of", at = @At("HEAD"), cancellable = true)
     private static void listenMsgSent(SignedMessage message, CallbackInfoReturnable<SentMessage> callbackInfo) {
-        if (message.getContent().getString().equals("[item]")){
+        ShowItemsMod.LOGGER.info("Got chat msg: {}, string: {}", message.getContent(), message.getContent().getString());
+
+        if (message.getContent().contains(Text.of("[item]"))){
             ShowItemsMod.LOGGER.info("Got show item in hand chat msg!");
 
             if (!message.isSenderMissing()) {

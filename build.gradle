@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '1.1.10'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 version = project.mod_version
@@ -14,6 +15,11 @@ repositories {
     // for more information about repositories.
 }
 
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -25,10 +31,11 @@ dependencies {
 
     // discord
     implementation "com.discord4j:discord4j-core:3.2.3"
+    shadow "com.discord4j:discord4j-core:3.2.3"
     // yaml loader
-    implementation 'org.yaml:snakeyaml:1.33'
+    implementation include('org.yaml:snakeyaml:1.33')
     // test
-    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
 
 processResources {
@@ -89,4 +96,15 @@ publishing {
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    exclude("META-INF")
+}
+
+remapJar {
+    dependsOn(shadowJar)
+    mustRunAfter(shadowJar)
+    inputFile = file(shadowJar.archivePath)
 }
