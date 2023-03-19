@@ -1,4 +1,4 @@
-package com.maisyt.minecraft.util.Exception;
+package com.maisyt.minecraft.util.exception;
 
 public class IllegalCallerException {
     public static class IllegalCallFromClientException extends IllegalStateException {

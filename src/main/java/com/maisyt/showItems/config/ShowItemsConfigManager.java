@@ -7,13 +7,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
-public class ShowItemConfigLoader {
-    static public ShowItemModConfig modConfig;
+public class ShowItemsConfigManager {
+    static public ShowItemsModConfig modConfig;
 
     static public void loadConfig(Path configPath){
-        YamlLoader<ShowItemModConfig> loader = new YamlLoader<>(ShowItemModConfig.class);
+        YamlLoader<ShowItemsModConfig> loader = new YamlLoader<>(ShowItemsModConfig.class);
         File configFile = configPath.toFile();
-        ShowItemsMod.LOGGER.info("Config file path: {}", configFile.getAbsolutePath());
+        ShowItemsMod.LOGGER.debug("Config file path: {}", configFile.getAbsolutePath());
 
         try {
             if (!configFile.exists()){
@@ -21,8 +21,7 @@ public class ShowItemConfigLoader {
             }
             modConfig = loader.load(configFile);
             ShowItemsMod.LOGGER.info("Config file loaded.");
-            ShowItemsMod.LOGGER.info("Discord bot channelId: {}", modConfig.getDiscordBot().getChannelId());
-            ShowItemsMod.LOGGER.info("Discord bot token: {}", modConfig.getDiscordBot().getServerToken());
+
             if (modConfig.getDiscordBot() == null || modConfig.getDiscordBot().getChannelId() == null){
                 throw new NullPointerException("Show-Items-config is null.");
             }
@@ -33,14 +32,21 @@ public class ShowItemConfigLoader {
     }
 
     public static void setDefaultConfig(){
-        modConfig = new ShowItemModConfig();
+        modConfig = new ShowItemsModConfig();
         modConfig.setDiscordBot(new DiscordBotConfig());
-        // TODO remove token
-        modConfig.getDiscordBot().setServerToken("MTA4NTU0Nzc4MzcwNjEyNDM1OA.Gk1Yr3.ZDEA3BPFkN362jazM68S1AJ-M0WK-LopjtVQCQ");
-        modConfig.getDiscordBot().setChannelId("1085546603848405012");
+        modConfig.getDiscordBot().setEnable(false);
+        modConfig.setEnable(false);
+
+        // TODO: write default config to /config/show-items-config.yaml
+
+        // TODO reset token as I somehow push it to github :)
     }
 
-    public static ShowItemModConfig getModConfig() {
+    public static ShowItemsModConfig getModConfig() {
         return modConfig;
+    }
+
+    public static boolean isDiscordEnable(){
+        return getModConfig().isEnable() && getModConfig().getDiscordBot().isEnable();
     }
 }

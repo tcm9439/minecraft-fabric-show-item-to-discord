@@ -7,6 +7,8 @@ public class DiscordBotConfig {
     private String serverToken;
     private Snowflake channelId;
 
+    // TODO: embed color, start/stop msg, sender info, msg content, etc.
+
     public boolean isEnable() {
         return enable;
     }

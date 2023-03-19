@@ -1,8 +1,8 @@
 package com.maisyt.showItems.mixin;
 
 import com.maisyt.showItems.ShowItemsMod;
-import com.maisyt.showItems.core.SendShowItemChat;
-import com.maisyt.showItems.core.ShowItemMsgType;
+import com.maisyt.showItems.core.SendShowItemsChat;
+import com.maisyt.showItems.core.ShowItemsMsgType;
 import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.text.Text;
@@ -18,17 +18,17 @@ public interface OnChatMsgMixin {
         ShowItemsMod.LOGGER.info("Got chat msg: {}, string: {}", message.getContent(), message.getContent().getString());
 
         if (message.getContent().contains(Text.of("[item]"))){
-            ShowItemsMod.LOGGER.info("Got show item in hand chat msg!");
+            ShowItemsMod.LOGGER.trace("Got show item in hand chat msg!");
 
             if (!message.isSenderMissing()) {
-                callbackInfo.setReturnValue(new SendShowItemChat.Chat(message, ShowItemMsgType.SHOW_ITEM_IN_HAND));
+                callbackInfo.setReturnValue(new SendShowItemsChat.Chat(message, ShowItemsMsgType.SHOW_ITEM_IN_HAND));
             }
 
         } else if (message.getContent().getString().equals("[inv]")){
-            ShowItemsMod.LOGGER.info("Got show inventory chat msg!");
+            ShowItemsMod.LOGGER.trace("Got show inventory chat msg!");
 
             if (!message.isSenderMissing()) {
-                callbackInfo.setReturnValue(new SendShowItemChat.Chat(message, ShowItemMsgType.SHOW_INVENTORY));
+                callbackInfo.setReturnValue(new SendShowItemsChat.Chat(message, ShowItemsMsgType.SHOW_INVENTORY));
             }
         }
     }

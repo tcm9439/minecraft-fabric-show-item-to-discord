@@ -2,9 +2,9 @@ package com.maisyt.minecraft.util;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
-import com.maisyt.minecraft.util.Exception.IllegalCallerException;
+import com.maisyt.minecraft.util.exception.IllegalCallerException;
 
-public class ClientSideMCUtil {
+public class PhysicalClientUtil {
     public static MinecraftClient getClient(){
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null){
@@ -21,7 +21,7 @@ public class ClientSideMCUtil {
     }
 
     public static String getRemoteServerAddress(){
-        MinecraftClient client = ClientSideMCUtil.getClient();
+        MinecraftClient client = PhysicalClientUtil.getClient();
         if (!client.isInSingleplayer()) {
             return client.getServer().getServerIp();
         }
