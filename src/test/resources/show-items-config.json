@@ -1,0 +1,29 @@
+{
+  "language": "en-US",
+  "languagePackPath": "/run/resourcepacks/Pangu-Languagepack.zip",
+  "texturePackPath": "/run/resourcepacks/Pangu-Resourcepack.zip",
+  "discord": {
+    "serverToken": "3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji",
+    "channelId": "12233525466224562"
+  },
+  "message": {
+    "mode": "text",
+    "startMessage": {
+      "embedColor": "#61de2a",
+      "message": "Show item bot is now online!"
+    },
+    "stopMessage": {
+      "embedColor": "#ff0000",
+      "message": "Show item bot is going to sleep..."
+    },
+    "showSingleItemMessage": {
+      "embedColor": "#1260cc",
+      "title": "${PlayerName}'s Item",
+      "includeTooltips": true
+    },
+    "showInventoryMessage": {
+      "embedColor": "#1260cc",
+      "title": "${PlayerName}'s Inventory"
+    }
+  }
+}

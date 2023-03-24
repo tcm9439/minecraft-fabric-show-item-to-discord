@@ -6,9 +6,6 @@ import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.GuildMessageChannel;
-import discord4j.core.spec.EmbedCreateSpec;
-import discord4j.core.spec.MessageCreateSpec;
-import discord4j.rest.util.Color;
 import reactor.core.publisher.Mono;
 
 import java.io.InputStream;
@@ -20,20 +17,20 @@ import java.util.function.Function;
  */
 public class ShowItemsDiscordBot {
     static ShowItemsDiscordBot instance;
+
     String token;
     Snowflake channelID;
     GatewayDiscordClient client;
 
     public static ShowItemsDiscordBot getInstance(){
         if (instance == null){
-            // TODO handle null instance
-            ShowItemsConfigManager.getModConfig().getDiscordBot().setEnable(false);
+            ShowItemsConfigManager.disable();
         }
         return instance;
     }
 
     public ShowItemsDiscordBot(){
-        channelID = ShowItemsConfigManager.getModConfig().getDiscordBot().getSnowflakeChannelId();
+        channelID = ShowItemsConfigManager.getModConfig().getDiscordBot().getChannelId();
         token = ShowItemsConfigManager.getModConfig().getDiscordBot().getServerToken();
         client = createGatewayDiscordClient(token);
     }
@@ -41,38 +38,18 @@ public class ShowItemsDiscordBot {
     public static void createBot(){
         instance = new ShowItemsDiscordBot();
         // TODO send online message
+        instance.sendMessageToDiscord(createSimpleTextMsgFunction("Show-Items bot is online."));
     }
 
     public boolean isDiscordBotConnected(){
         // TODO
-        return true;
+        return false;
     }
 
     public static GatewayDiscordClient createGatewayDiscordClient(String token) {
         return DiscordClientBuilder.create(token).build()
                 .login()
                 .block();
-    }
-
-    public static Function<GuildMessageChannel, Mono<Message>> createShowItemEmbedMsg
-            (InputStream renderedItemImage, String itemName, String playerName, int itemAmount){
-        String title = playerName+"'s Item";
-        String itemInfo = itemName;
-        if (itemAmount > 1){
-            itemInfo += " x"+itemAmount;
-        }
-        String thumbnailFileName = playerName + "-item.png";
-
-        EmbedCreateSpec embed = EmbedCreateSpec.builder()
-                .color(Color.CYAN)
-                .addField(title, itemInfo, false)
-                .thumbnail("attachment://" + thumbnailFileName)
-                .build();
-
-        return channel -> channel.createMessage(MessageCreateSpec.builder()
-                .addFile(thumbnailFileName, renderedItemImage)
-                .addEmbed(embed)
-                .build());
     }
 
     public static Function<GuildMessageChannel, Mono<Message>> createShowInventoryEmbedMsg

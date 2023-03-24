@@ -10,13 +10,14 @@ class ShowItemsConfigLoaderTest {
 
     @Test
     void loadConfig() {
-        File configFile = new File("src/test/resources/show-items-config.yaml");
+        // TODO test case
+        File configFile = new File("src/test/resources/show-items-config.json");
         assertTrue(configFile.exists());
 
         ShowItemsConfigManager.loadConfig(configFile.toPath());
 
+        assertTrue(ShowItemsConfigManager.isEnable());
         assertEquals("3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji", ShowItemsConfigManager.modConfig.getDiscordBot().getServerToken());
-        assertEquals("12233525466224562", ShowItemsConfigManager.modConfig.getDiscordBot().getChannelId());
-        assertEquals(true, ShowItemsConfigManager.modConfig.getDiscordBot().isEnable());
+        assertEquals("12233525466224562", ShowItemsConfigManager.modConfig.getDiscordBot().getChannelId().asString());
     }
 }

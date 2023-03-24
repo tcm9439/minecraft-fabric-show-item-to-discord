@@ -1,21 +1,15 @@
 package com.maisyt.showItems.config;
 
 import discord4j.common.util.Snowflake;
+import net.fabricmc.loader.impl.lib.gson.JsonReader;
+
+import java.io.IOException;
 
 public class DiscordBotConfig {
-    private boolean enable;
     private String serverToken;
     private Snowflake channelId;
 
-    // TODO: embed color, start/stop msg, sender info, msg content, etc.
-
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
+    public DiscordBotConfig() {}
 
     public String getServerToken() {
         return serverToken;
@@ -25,15 +19,31 @@ public class DiscordBotConfig {
         this.serverToken = serverToken;
     }
 
-    public Snowflake getSnowflakeChannelId() {
+    public Snowflake getChannelId() {
         return channelId;
-    }
-
-    public String getChannelId() {
-        return channelId.asString();
     }
 
     public void setChannelId(String channelId) {
         this.channelId = Snowflake.of(channelId);
+    }
+
+    public boolean validate(){
+        return serverToken != null && !serverToken.isEmpty()
+                && channelId != null && !channelId.asString().isEmpty();
+    }
+
+    public static DiscordBotConfig load(JsonReader reader) throws IOException {
+        DiscordBotConfig config = new DiscordBotConfig();
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+                case "serverToken" -> config.setServerToken(reader.nextString());
+                case "channelId" -> config.setChannelId(reader.nextString());
+                default -> reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return config;
     }
 }

@@ -1,5 +1,6 @@
 package com.maisyt.showItems.core;
 
+import com.maisyt.showItems.message.ShowItemsMsgType;
 import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.network.message.MessageType;
@@ -15,12 +16,7 @@ public interface SendShowItemsChat extends SentMessage {
 
         @Override
         public void send(ServerPlayerEntity sender, boolean filterMaskEnabled, MessageType.Parameters params) {
-            if (msgType == ShowItemsMsgType.SHOW_ITEM_IN_HAND) {
-                ShowItemsMsgHandler.onShowItemMsg(sender);
-            } else if (msgType == ShowItemsMsgType.SHOW_INVENTORY) {
-                ShowItemsMsgHandler.onShowInventoryMsg(sender);
-            }
-            // else, unknown msg type, do nothing
+            ShowItemsMsgHandler.handleMessage(sender, msgType);
 
             // ori function content
             SignedMessage signedMessage = this.message.withFilterMaskEnabled(filterMaskEnabled);

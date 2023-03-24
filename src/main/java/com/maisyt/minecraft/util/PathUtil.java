@@ -1,5 +1,7 @@
 package com.maisyt.minecraft.util;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import com.maisyt.minecraft.util.exception.IllegalCallerException.*;
 import net.minecraft.client.MinecraftClient;
@@ -31,14 +33,6 @@ public class PathUtil {
     }
 
     /**
-     * Get the game path for this save: .../minecraft/saves/
-     * For client only
-     */
-    public static Path getSavesRoot() throws IllegalCallFromServerException {
-        return PhysicalClientUtil.getClient().getLevelStorage().getSavesDirectory();
-    }
-
-    /**
      * For both server side & client.
      * Get the save path for current save.
      * Server: ./level-name/
@@ -46,28 +40,5 @@ public class PathUtil {
      */
     public static Path getSavePath(MinecraftServer server){
         return server.getSavePath(WorldSavePath.ROOT);
-    }
-
-    /**
-     * For client only.
-     * Get the save path for current save.
-     *      Local server client: .../minecraft/saves/save-name/
-     *      Remote server client: .../minecraft/remoteServerSaves/server-ip
-     */
-    public static Path getSavePathFromClient(){
-        MinecraftClient client = PhysicalClientUtil.getClient();
-        if (client.isInSingleplayer()){
-            return client.getServer().getSavePath(WorldSavePath.ROOT);
-        } else {
-            return getRemoteServerLocalSavePath();
-        }
-    }
-
-    /**
-     * For non-local client only.
-     * Get path to .../minecraft/remoteServerSaves/server-ip
-     */
-    public static Path getRemoteServerLocalSavePath(){
-        return getGameRootDirectory().resolve("remoteServerSaves").resolve(PhysicalClientUtil.getRemoteServerAddress());
     }
 }

@@ -1,5 +1,6 @@
 package com.maisyt.showItems.resources;
 
+import com.maisyt.minecraft.util.PathUtil;
 import com.maisyt.showItems.ShowItemsMod;
 import com.maisyt.util.file.loader.ZipLoader;
 
@@ -11,7 +12,8 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 public class ServerResourceManager {
-    private static final String DUMMY_TEXTURE_PATH = "src/main/resources/assets/dummyItemTexture.png";
+    private static String DUMMY_TEXTURE_PATH;
+//    private static final String DUMMY_TEXTURE_PATH = "src/main/resources/assets/dummyItemTexture.png";
     private static BufferedImage dummyTexture;
 
     private static ServerResourceManager instance;
@@ -26,6 +28,7 @@ public class ServerResourceManager {
     }
 
     public ServerResourceManager(Path pathToResourcePack) {
+        DUMMY_TEXTURE_PATH = PathUtil.getGlobalConfigDirectory().resolve("show-items-config.yaml").toString();
         this.pathToResourcePack = pathToResourcePack;
     }
 
