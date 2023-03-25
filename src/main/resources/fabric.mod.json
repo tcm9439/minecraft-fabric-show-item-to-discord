@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "mt-show-items",
+  "id": "mt-show-items-to-discord",
   "version": "${version}",
   "name": "ShowItmes",
   "description": "Show your items to friends!",
@@ -12,11 +12,11 @@
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
   "license": "MIT License",
-  "icon": "assets/mt/icon.png",
+  "icon": "assets/mt-show-items-to-discord/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.maisyt.showItems.ShowItemsMod"
+      "net.maisyt.showItems.ShowItemsMod"
     ],
     "client": [
     ]

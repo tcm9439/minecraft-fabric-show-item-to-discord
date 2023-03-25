@@ -1,0 +1,29 @@
+{
+  "language": "en-US",
+  "languagePackPath": "/resourcepacks/xxx.zip",
+  "texturePackPath": "/resourcepacks/xxx.zip",
+  "discord": {
+    "serverToken": "",
+    "channelId": ""
+  },
+  "message": {
+    "mode": "text",
+    "startMessage": {
+      "embedColor": "#61de2a",
+      "message": "Show item bot is now online!"
+    },
+    "stopMessage": {
+      "embedColor": "#ff0000",
+      "message": "Show item bot is going to sleep..."
+    },
+    "showSingleItemMessage": {
+      "embedColor": "#1260cc",
+      "title": "${PlayerName}'s Item",
+      "includeTooltips": true
+    },
+    "showInventoryMessage": {
+      "embedColor": "#1260cc",
+      "title": "${PlayerName}'s Inventory"
+    }
+  }
+}
