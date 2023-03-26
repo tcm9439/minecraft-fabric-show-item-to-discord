@@ -5,6 +5,8 @@ import net.fabricmc.loader.impl.lib.gson.JsonReader;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowItemsModConfig {
     /**
@@ -12,7 +14,7 @@ public class ShowItemsModConfig {
      * Either a zip file or a folder.
      * If the path is invalid, dummy texture will be used.
      */
-    private Path texturePackPath = null;
+    private List<Path> texturePackPaths = new ArrayList<>();
 
     /**
      * The language code to used.
@@ -25,7 +27,7 @@ public class ShowItemsModConfig {
      * Either a zip file or a folder.
      * If the path is invalid, item id / placeholder will be used.
      */
-    private Path languagePackPath = null;
+    private List<Path> languagePackPaths = new ArrayList<>();
 
     private DiscordBotConfig discordBot = null;
 
@@ -50,23 +52,42 @@ public class ShowItemsModConfig {
         this.language = language;
     }
 
-    public Path getTexturePackPath() {
-        return texturePackPath;
+    public List<Path> getTexturePackPaths() {
+        return texturePackPaths;
     }
 
-    public void setTexturePackPath(String texturePackPath) {
+    public void addTexturePackPath(String texturePackPath) {
         if (texturePackPath == null || texturePackPath.isEmpty()){
             return;
         }
-        this.texturePackPath = Path.of(texturePackPath);
+        this.texturePackPaths.add(Path.of(texturePackPath));
     }
 
-    public Path getLanguagePackPath() {
-        return languagePackPath;
+    public void loadTexturePackPaths(JsonReader reader) throws IOException {
+        reader.beginArray();
+        while (reader.hasNext()) {
+            addTexturePackPath(reader.nextString());
+        }
+        reader.endArray();
     }
 
-    public void setLanguagePackPath(String languagePackPath) {
-        this.languagePackPath = Path.of(languagePackPath);
+    public List<Path> getLanguagePackPaths() {
+        return languagePackPaths;
+    }
+
+    public void addLanguagePackPath(String languagePackPath) {
+        if (languagePackPath == null || languagePackPath.isEmpty()){
+            return;
+        }
+        this.languagePackPaths.add(Path.of(languagePackPath));
+    }
+
+    public void loadLanguagePackPaths(JsonReader reader) throws IOException {
+        reader.beginArray();
+        while (reader.hasNext()) {
+            addLanguagePackPath(reader.nextString());
+        }
+        reader.endArray();
     }
 
     public MessageConfig getMessage() {
@@ -78,21 +99,26 @@ public class ShowItemsModConfig {
     }
 
     public boolean validate(){
-        if (texturePackPath != null && !texturePackPath.toFile().exists()){
-            // still valid, e.g. in text mode we don't need texture pack
-            ShowItemsMod.LOGGER.info("Texture pack path is invalid. Using dummy texture. Ignore this log if using text mode");
-            texturePackPath = null;
-        }
-        if (languagePackPath != null && !languagePackPath.toFile().exists()){
-            ShowItemsMod.LOGGER.info("Language pack path is invalid. Using item id.");
-            languagePackPath = null;
-        }
-
         if (discordBot == null || !discordBot.validate()){
             ShowItemsMod.LOGGER.warn("Discord bot config is invalid. Disable the mod.");
             ShowItemsConfigManager.disable();
             return false;
         }
+
+        // TODO check file type
+        texturePackPaths.forEach(path -> {
+            if (!path.toFile().exists()){
+                ShowItemsMod.LOGGER.info("Texture pack path {} is invalid. If no texture is found, dummy texture will be used.", path);
+                texturePackPaths.remove(path);
+            }
+        });
+
+        languagePackPaths.forEach(path -> {
+            if (!path.toFile().exists()){
+                ShowItemsMod.LOGGER.info("Language pack path {} is invalid. If no translation is found, item id will be used.", path);
+                languagePackPaths.remove(path);
+            }
+        });
 
         // doesn't need to check the message config as it is already checked when load()
 
@@ -105,9 +131,9 @@ public class ShowItemsModConfig {
         reader.beginObject();
         while (reader.hasNext()){
             switch (reader.nextName()) {
+                case "texturePackPath" -> config.loadTexturePackPaths(reader);
                 case "language" -> config.setLanguage(reader.nextString());
-                case "texturePackPath" -> config.setTexturePackPath(reader.nextString());
-                case "languagePackPath" -> config.setLanguagePackPath(reader.nextString());
+                case "languagePackPath" -> config.loadLanguagePackPaths(reader);
                 case "discord" -> config.setDiscordBot(DiscordBotConfig.load(reader));
                 case "message" -> config.setMessage(MessageConfig.load(reader));
                 default -> reader.skipValue();

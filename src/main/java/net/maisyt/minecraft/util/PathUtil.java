@@ -13,7 +13,7 @@ public class PathUtil {
     /**
      * Get the game global config file path.
      *      client: .../minecraft/config/
-     *      server: ?
+     *      server: .../config/
      */
     public static Path getGlobalConfigDirectory(){
         return FabricLoader.getInstance().getConfigDir();

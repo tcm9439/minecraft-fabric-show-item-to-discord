@@ -1,5 +1,8 @@
 package net.maisyt.showItems;
 
+import net.maisyt.minecraft.util.resource.manager.ServerLanguageManager;
+import net.maisyt.minecraft.util.resource.manager.ServerTextureManager;
+import net.maisyt.showItems.config.MessageMode;
 import net.maisyt.showItems.config.ShowItemsConfigManager;
 import net.maisyt.showItems.core.ShowItemsMsgHandler;
 import net.maisyt.showItems.discord.ShowItemsDiscordBot;
@@ -31,6 +34,13 @@ public class ShowItemsMod implements ModInitializer {
             if (ShowItemsConfigManager.isEnable()){
                 ShowItemsMod.LOGGER.debug("Starting Discord bot.");
                 ShowItemsDiscordBot.createBot();
+
+                if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
+                    ServerTextureManager.init(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
+                }
+
+                ServerLanguageManager.init(ShowItemsConfigManager.getModConfig().getLanguage(),
+                        ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
             } else {
                 ShowItemsMod.LOGGER.debug("Discord bot is disabled.");
             }
@@ -52,7 +62,17 @@ public class ShowItemsMod implements ModInitializer {
 
     public static void reloadMod(){
         shutdownMod();
+
+        // restart
         initMod();
         ShowItemsMsgHandler.restart();
+
+        // reload resource packs
+        if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
+            ServerTextureManager.reload(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
+        }
+
+        ServerLanguageManager.reload(ShowItemsConfigManager.getModConfig().getLanguage(),
+                ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
     }
 }

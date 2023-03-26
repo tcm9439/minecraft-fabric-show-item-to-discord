@@ -1,7 +1,12 @@
 {
   "language": "en-US",
-  "languagePackPath": "/resourcepacks/xxx.zip",
-  "texturePackPath": "/resourcepacks/xxx.zip",
+  "languagePackPath": [
+    "/run/resourcepacks/xxx.zip",
+    "/run/resourcepacks/xxx.json"
+  ],
+  "texturePackPath": [
+    "/run/resourcepacks/xxx.zip"
+  ],
   "discord": {
     "serverToken": "",
     "channelId": ""

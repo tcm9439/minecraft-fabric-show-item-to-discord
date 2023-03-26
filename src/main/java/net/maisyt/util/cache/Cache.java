@@ -1,5 +1,6 @@
 package net.maisyt.util.cache;
 
+// TODO: remove cache if I don't use it at last
 public abstract class Cache <K,V>{
     public static final int NO_LIMIT = -1;
     private int capacity = NO_LIMIT;

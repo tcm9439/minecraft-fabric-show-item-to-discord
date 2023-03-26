@@ -8,5 +8,6 @@ public class ServerModRegistries {
     public static void registerModStuffs() {
         CommandRegistrationCallback.EVENT.register(ReloadCommand::register);
         CommandRegistrationCallback.EVENT.register(GenerateDefaultConfigCommand::register);
+        // TODO: debug command
     }
 }
