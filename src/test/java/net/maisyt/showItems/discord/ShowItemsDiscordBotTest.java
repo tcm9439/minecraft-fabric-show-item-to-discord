@@ -15,7 +15,7 @@ class ShowItemsDiscordBotTest {
         File configFile = new File("run/config/ShowItems/show-items-config.json");
         assertTrue(configFile.exists());
 
-        ShowItemsConfigManager.loadConfig(configFile.toPath());
+        ShowItemsConfigManager.loadConfig(configFile.toPath(), path -> path);
 
         ShowItemsDiscordBot.createBot();
     }

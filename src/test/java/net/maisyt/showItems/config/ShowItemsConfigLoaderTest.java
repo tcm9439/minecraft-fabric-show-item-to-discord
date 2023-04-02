@@ -10,14 +10,29 @@ class ShowItemsConfigLoaderTest {
 
     @Test
     void loadConfig() {
-        // TODO test case
         File configFile = new File("src/test/resources/show-items-config.json");
-        assertTrue(configFile.exists());
 
-        ShowItemsConfigManager.loadConfig(configFile.toPath());
+        ShowItemsConfigManager.loadConfig(configFile.toPath(), path -> path);
+        ShowItemsModConfig config = ShowItemsConfigManager.getModConfig();
 
         assertTrue(ShowItemsConfigManager.isEnable());
-        assertEquals("3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji", ShowItemsConfigManager.modConfig.getDiscordBot().getServerToken());
-        assertEquals("12233525466224562", ShowItemsConfigManager.modConfig.getDiscordBot().getChannelId().asString());
+
+        assertEquals("en-us", config.getLanguage());
+        assertEquals(2, config.getLanguagePackPaths().size());
+        assertEquals("src/test/resources/lang-without-outer.zip", config.getLanguagePackPaths().get(0).toString());
+        assertEquals("src/test/resources/lang-with-outer.zip", config.getLanguagePackPaths().get(1).toString());
+
+        // Note: the path must exist or it will be removed at validate(), so use a fake one here
+        assertEquals(1, config.getTexturePackPaths().size());
+        assertEquals("src/test/resources/lang-with-outer.zip", config.getTexturePackPaths().get(0).toString());
+
+        assertEquals("3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji", config.getDiscordBot().getServerToken());
+        assertEquals("12233525466224562", config.getDiscordBot().getChannelId().asString());
+
+        MessageConfig messageConfig = config.getMessage();
+        assertEquals(MessageMode.TEXT, messageConfig.getMode());
+        assertEquals("Show item bot is now online!" ,messageConfig.getStartMessage().getMessage());
+        assertEquals("我先下囉，拜～" ,messageConfig.getStopMessage().getMessage());
+        assertEquals("${PlayerName}'s Item" ,messageConfig.getShowSingleItemMessage().getTitle().getStringWithPlaceholders());
     }
 }

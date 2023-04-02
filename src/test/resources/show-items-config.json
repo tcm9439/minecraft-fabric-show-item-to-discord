@@ -1,10 +1,11 @@
 {
-  "language": "en-US",
+  "language": "en-us",
   "languagePackPath": [
-    "/run/resourcepacks/Pangu-Languagepack.zip"
+    "src/test/resources/lang-without-outer.zip",
+    "src/test/resources/lang-with-outer.zip"
   ],
   "texturePackPath": [
-    "/run/resourcepacks/Pangu-Resourcepack.zip"
+    "src/test/resources/lang-with-outer.zip"
   ],
   "discord": {
     "serverToken": "3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji",
@@ -18,7 +19,7 @@
     },
     "stopMessage": {
       "embedColor": "#ff0000",
-      "message": "Show item bot is going to sleep..."
+      "message": "我先下囉，拜～"
     },
     "showSingleItemMessage": {
       "embedColor": "#1260cc",

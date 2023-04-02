@@ -6,9 +6,9 @@ import java.util.List;
 
 public class SingleItemInfo extends ItemsInfo {
     private String playerName;
-    private String itemNameTranslationKey;
+    private net.maisyt.minecraft.util.text.Text itemName;
     private String itemID;
-    private List<Text> tooltips;
+    private List<net.maisyt.minecraft.util.text.Text> tooltips;
     private boolean hasEnchantments;
     private int amount;
     private int maxDurability;
@@ -17,20 +17,20 @@ public class SingleItemInfo extends ItemsInfo {
     public SingleItemInfo() {
     }
 
-    public SingleItemInfo(String playerName, String itemNameTranslationKey, String itemID, List<Text> tooltips,
+    public SingleItemInfo(String playerName, net.maisyt.minecraft.util.text.Text itemName, String itemID, List<net.maisyt.minecraft.util.text.Text> tooltips,
                           boolean hasEnchantments, int amount) {
         this.playerName = playerName;
-        this.itemNameTranslationKey = itemNameTranslationKey;
+        this.itemName = itemName;
         this.itemID = itemID;
         this.tooltips = tooltips;
         this.hasEnchantments = hasEnchantments;
         this.amount = amount;
     }
 
-    public SingleItemInfo(String playerName, String itemNameTranslationKey, String itemID, List<Text> tooltips,
+    public SingleItemInfo(String playerName, net.maisyt.minecraft.util.text.Text itemName, String itemID, List<net.maisyt.minecraft.util.text.Text> tooltips,
                           boolean hasEnchantments, int maxDurability, int currentDurability) {
         this.playerName = playerName;
-        this.itemNameTranslationKey = itemNameTranslationKey;
+        this.itemName = itemName;
         this.itemID = itemID;
         this.tooltips = tooltips;
         this.hasEnchantments = hasEnchantments;
@@ -46,12 +46,12 @@ public class SingleItemInfo extends ItemsInfo {
         this.playerName = playerName;
     }
 
-    public String getItemNameTranslationKey() {
-        return itemNameTranslationKey;
+    public net.maisyt.minecraft.util.text.Text getItemName() {
+        return itemName;
     }
 
-    public void setItemNameTranslationKey(String itemNameTranslationKey) {
-        this.itemNameTranslationKey = itemNameTranslationKey;
+    public void setItemName(net.maisyt.minecraft.util.text.Text itemName) {
+        this.itemName = itemName;
     }
 
     public String getItemID() {
@@ -62,11 +62,11 @@ public class SingleItemInfo extends ItemsInfo {
         this.itemID = itemID;
     }
 
-    public List<Text> getTooltips() {
+    public List<net.maisyt.minecraft.util.text.Text> getTooltips() {
         return tooltips;
     }
 
-    public void setTooltips(List<Text> tooltips) {
+    public void setTooltips(List<net.maisyt.minecraft.util.text.Text> tooltips) {
         this.tooltips = tooltips;
     }
 
@@ -100,5 +100,19 @@ public class SingleItemInfo extends ItemsInfo {
 
     public void setCurrentDurability(int currentDurability) {
         this.currentDurability = currentDurability;
+    }
+
+    @Override
+    public String toString() {
+        return "SingleItemInfo{" +
+                "playerName='" + playerName + '\'' +
+                ", itemName='" + itemName + '\'' +
+                ", itemID='" + itemID + '\'' +
+                ", tooltips=" + tooltips +
+                ", hasEnchantments=" + hasEnchantments +
+                ", amount=" + amount +
+                ", maxDurability=" + maxDurability +
+                ", currentDurability=" + currentDurability +
+                '}';
     }
 }

@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "id": "mt-show-items-to-discord",
   "version": "${version}",
-  "name": "ShowItmes",
+  "name": "ShowItems",
   "description": "Show your items to friends!",
   "authors": [
     "Maisy Tse"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/tcm9439/show-items-fabric"
   },
   "license": "MIT License",
   "icon": "assets/mt-show-items-to-discord/icon.png",
@@ -19,6 +19,9 @@
       "net.maisyt.showItems.ShowItemsMod"
     ],
     "client": [
+    ],
+    "server": [
+      "net.maisyt.showItems.ShowItemsServerMod"
     ]
   },
   "mixins": [

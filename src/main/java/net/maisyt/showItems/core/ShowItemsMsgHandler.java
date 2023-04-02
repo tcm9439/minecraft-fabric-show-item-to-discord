@@ -1,5 +1,6 @@
 package net.maisyt.showItems.core;
 
+import net.maisyt.showItems.ShowItemsMod;
 import net.maisyt.showItems.discord.ShowItemsDiscordBot;
 import net.maisyt.showItems.message.ShowItemsMsgType;
 import net.maisyt.showItems.message.itemInfo.IItemsInfoExtractor;
@@ -25,9 +26,15 @@ public class ShowItemsMsgHandler {
     static public ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static void shutdown(){
-        // TODO force shutdown
         if (executor != null && !executor.isShutdown()){
-            executor.shutdownNow();
+            executor.shutdown();
+            if (!executor.isShutdown()){
+                try {
+                    Thread.sleep(1500);
+                    executor.shutdownNow();
+                } catch (InterruptedException e) {
+                }
+            }
         }
     }
 
@@ -38,6 +45,7 @@ public class ShowItemsMsgHandler {
 
     static public void handleMessage(ServerPlayerEntity sender, ShowItemsMsgType msgType){
         if (executor.isShutdown()){
+            ShowItemsMod.LOGGER.warn("Executor is shutdown, cannot handle message");
             return;
         }
 

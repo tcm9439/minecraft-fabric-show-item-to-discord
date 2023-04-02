@@ -19,6 +19,10 @@ public class NamedPlaceholderString {
         this.stringWithPlaceholders = stringWithPlaceholders;
     }
 
+    public String getStringWithPlaceholders() {
+        return stringWithPlaceholders;
+    }
+
     /**
      * Format a string with placeholders with supplied values.
      * @param placeholderValues Map of placeholders name to value to plug in

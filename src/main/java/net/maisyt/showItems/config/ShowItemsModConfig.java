@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class ShowItemsModConfig {
+    private static Function<Path, Path> pathResolver;
+
     /**
      * The path to the one and only one texture pack.
      * Either a zip file or a folder.
@@ -60,7 +63,7 @@ public class ShowItemsModConfig {
         if (texturePackPath == null || texturePackPath.isEmpty()){
             return;
         }
-        this.texturePackPaths.add(Path.of(texturePackPath));
+        this.texturePackPaths.add(pathResolver.apply(Path.of(texturePackPath)));
     }
 
     public void loadTexturePackPaths(JsonReader reader) throws IOException {
@@ -79,7 +82,7 @@ public class ShowItemsModConfig {
         if (languagePackPath == null || languagePackPath.isEmpty()){
             return;
         }
-        this.languagePackPaths.add(Path.of(languagePackPath));
+        this.languagePackPaths.add(pathResolver.apply(Path.of(languagePackPath)));
     }
 
     public void loadLanguagePackPaths(JsonReader reader) throws IOException {
@@ -106,26 +109,31 @@ public class ShowItemsModConfig {
         }
 
         // TODO check file type
-        texturePackPaths.forEach(path -> {
+        List<Path> pathToRemove = new ArrayList<>();
+        for (Path path : texturePackPaths) {
             if (!path.toFile().exists()){
                 ShowItemsMod.LOGGER.info("Texture pack path {} is invalid. If no texture is found, dummy texture will be used.", path);
-                texturePackPaths.remove(path);
+                pathToRemove.add(path);
             }
-        });
+        }
+        texturePackPaths.removeAll(pathToRemove);
 
-        languagePackPaths.forEach(path -> {
+        pathToRemove.clear();
+        for (Path path : languagePackPaths) {
             if (!path.toFile().exists()){
                 ShowItemsMod.LOGGER.info("Language pack path {} is invalid. If no translation is found, item id will be used.", path);
-                languagePackPaths.remove(path);
+                pathToRemove.add(path);
             }
-        });
+        }
+        languagePackPaths.removeAll(pathToRemove);
 
         // doesn't need to check the message config as it is already checked when load()
 
         return true;
     }
 
-    public static ShowItemsModConfig load(JsonReader reader) throws IOException {
+    public static ShowItemsModConfig load(JsonReader reader, Function<Path, Path> pathResolver) throws IOException {
+        ShowItemsModConfig.pathResolver = pathResolver;
         ShowItemsModConfig config = new ShowItemsModConfig();
 
         reader.beginObject();

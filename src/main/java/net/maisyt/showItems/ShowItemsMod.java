@@ -32,7 +32,7 @@ public class ShowItemsMod implements ModInitializer {
         try {
             ShowItemsConfigManager.loadConfig();
             if (ShowItemsConfigManager.isEnable()){
-                ShowItemsMod.LOGGER.debug("Starting Discord bot.");
+                ShowItemsMod.LOGGER.info("Starting Discord bot.");
                 ShowItemsDiscordBot.createBot();
 
                 if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
@@ -54,6 +54,7 @@ public class ShowItemsMod implements ModInitializer {
         try {
             if (ShowItemsConfigManager.isEnable()){
                 ShowItemsDiscordBot.getInstance().disconnect();
+                ShowItemsMsgHandler.shutdown();
             }
         } catch (Exception e){
             ShowItemsMod.LOGGER.error("Error when shutdown Show Items Mod: {}", e.getMessage(), e);

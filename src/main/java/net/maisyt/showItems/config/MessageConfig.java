@@ -2,11 +2,12 @@ package net.maisyt.showItems.config;
 
 import discord4j.rest.util.Color;
 import net.fabricmc.loader.impl.lib.gson.JsonReader;
+import net.maisyt.util.string.NamedPlaceholderString;
 
 import java.io.IOException;
 
 public class MessageConfig {
-    public static final String PLAYER_NAME_PLACEHOLDER = "player_name";
+    public static final String PLAYER_NAME_PLACEHOLDER = "PlayerName";
     public class StartMessageConfig {
         Color embedColor = Color.MEDIUM_SEA_GREEN;
         String message = "Show item bot is online!";
@@ -75,7 +76,7 @@ public class MessageConfig {
 
     public class showSingleItemMessageConfig {
         Color embedColor = Color.GRAY;
-        String title = "${PlayerName}'s Item";
+        NamedPlaceholderString title = new NamedPlaceholderString("${PlayerName}'s Item");
         boolean includeTooltip = false;
 
         public showSingleItemMessageConfig() {}
@@ -89,7 +90,7 @@ public class MessageConfig {
                     case "title" -> {
                         String readTitle = reader.nextString();
                         if (readTitle != null && readTitle.contains("${"+PLAYER_NAME_PLACEHOLDER+"}")){
-                            title = readTitle;
+                            title = new NamedPlaceholderString(readTitle);
                         }
                     }
                     case "includeTooltip" -> includeTooltip = reader.nextBoolean();
@@ -103,7 +104,7 @@ public class MessageConfig {
             return embedColor;
         }
 
-        public String getTitle() {
+        public NamedPlaceholderString getTitle() {
             return title;
         }
 
@@ -114,7 +115,7 @@ public class MessageConfig {
 
     public class showInventoryMessageConfig {
         Color embedColor = Color.GRAY;
-        String title = "${PlayerName}'s Inventory";
+        NamedPlaceholderString title = new NamedPlaceholderString("${PlayerName}'s Inventory");
 
         public showInventoryMessageConfig() {}
 
@@ -127,7 +128,7 @@ public class MessageConfig {
                     case "title" -> {
                         String readTitle = reader.nextString();
                         if (readTitle != null && readTitle.contains("${"+PLAYER_NAME_PLACEHOLDER+"}")){
-                            title = readTitle;
+                            title = new NamedPlaceholderString(readTitle);
                         }
                     }
                     default -> reader.skipValue();
@@ -140,7 +141,7 @@ public class MessageConfig {
             return embedColor;
         }
 
-        public String getTitle() {
+        public NamedPlaceholderString getTitle() {
             return title;
         }
     }

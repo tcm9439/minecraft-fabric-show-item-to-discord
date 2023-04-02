@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -31,11 +32,11 @@ public class ShowItemsConfigManager {
     }
 
     static public void loadConfig(){
-        loadConfig(getConfigFilePath());
+        loadConfig(getConfigFilePath(), path -> PathUtil.getGameRootDirectory().resolve(path));
     }
 
     // TODO reset token as I somehow push it to github :)
-    static public void loadConfig(Path configPath){
+    static public void loadConfig(Path configPath, Function<Path, Path> pathResolver){
         File configFile = configPath.toFile();
         if (!configFile.exists()){
             ShowItemsMod.LOGGER.warn("Config file not exists.");
@@ -44,7 +45,7 @@ public class ShowItemsConfigManager {
         }
 
         try (JsonReader reader = new JsonReader(new FileReader(configFile))) {
-            modConfig = ShowItemsModConfig.load(reader);
+            modConfig = ShowItemsModConfig.load(reader, pathResolver);
 
             if (!modConfig.validate()){
                 ShowItemsMod.LOGGER.warn("Config file is invalid. Try to continue with the default.");
