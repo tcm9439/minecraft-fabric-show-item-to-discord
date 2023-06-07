@@ -1,5 +1,7 @@
 package net.maisyt.showItems.image;
 
+import net.maisyt.showItems.ShowItemsMod;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,9 +10,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-// ref: net.minecraft.client.gui.screen.ingame.InventoryScreen
 public abstract class ImageRender<T> {
-    static public String FONT_NAME = "Courier";
+    static public String FONT_NAME = null;
+//    static public String FONT_NAME = "Courier";
     protected BufferedImage renderedImage;
     protected Graphics2D g2d;
 
@@ -21,23 +23,31 @@ public abstract class ImageRender<T> {
         try {
             ImageIO.write(image, "png", os);
         } catch (IOException e) {
-//            e.printStackTrace();
+            ShowItemsMod.LOGGER.error("Failed to convert BufferedImage to InputStream", e);
         }
         return new ByteArrayInputStream(os.toByteArray());
     }
 
-    public BufferedImage getFinalRenderedImage() {
+    protected BufferedImage getFinalRenderedImage() {
         g2d.dispose();
         return renderedImage;
     }
 
     BufferedImage createBackgroundImage(int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = image.createGraphics();
-        return null;
+        g2d = image.createGraphics();
+        return image;
     }
 
     BufferedImage resizeImage(BufferedImage image, int width, int height) {
-        return (BufferedImage) image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return convertedToBufferedImage(image.getScaledInstance(width, height, Image.SCALE_SMOOTH));
+    }
+
+    BufferedImage convertedToBufferedImage(Image image) {
+        BufferedImage newImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = newImage.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+        return newImage;
     }
 }

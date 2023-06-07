@@ -1,78 +1,79 @@
 package net.maisyt.showItems.image;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.maisyt.showItems.ShowItemsMod;
+import net.maisyt.showItems.message.itemInfo.SingleItemInfo;
+import net.maisyt.showItems.message.itemInfo.SingleItemInfoTestHelper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static org.mockito.Mockito.mockStatic;
-
 class ItemImageRenderTest {
-    static int outputImageCounter = 0;
-
-    static BufferedImage getItemImage(String itemName) throws IOException {
-        return ImageIO.read(new File("src/test/resources/" + itemName + ".png"));
+    @BeforeAll
+    static void setup() {
+        RenderTestHelper.setupResourceManager();
     }
 
     @Test
     void renderBrokenItem() throws IOException {
-        BufferedImage itemImage = getItemImage("iron_sword");
+        BufferedImage itemImage = RenderTestHelper.getItemImage("iron_sword");
+
+        SingleItemInfo itemInfo = SingleItemInfoTestHelper.createSingleToolItemInfo();
+        ItemImageRender itemImageRender;
+        BufferedImage resultImage;
+
         // max durability: 250
-        // TODO change the test as Items.MCID is not working in unit test
-        try (MockedStatic mocked = mockStatic(Items.class)) {
-//            mocked.when(Items.register).thenReturn("bar");
+        // almost broken -> full
+        int[] durability = {1, 10, 60, 125, 190, 230, 249, 250};
 
-            ItemStack itemStack = new ItemStack(Items.IRON_SWORD);
-            ItemImageRender itemImageRender;
-            BufferedImage resultImage;
-
-            // full, nearly full, ..., 1 left
-            int[] damage = {0, 1, 10, 60, 125, 190, 230, 249};
-
-            for (int i : damage) {
-                itemStack.setDamage(i);
-                itemImageRender = new ItemImageRender(itemStack, itemImage);
-                resultImage = itemImageRender.render();
-                saveTestImage(resultImage);
-            }
+        for (int i : durability) {
+            itemInfo.setCurrentDurability(i);
+            ShowItemsMod.LOGGER.debug("Render item: {} ", itemInfo);
+            itemImageRender = new ItemImageRender(itemInfo, itemImage);
+            resultImage = itemImageRender.render();
+            RenderTestHelper.saveTestImage(resultImage);
         }
     }
 
     @Test
     void renderNonBreakableItem() throws IOException {
-        BufferedImage itemImage = ImageIO.read(new File("src/test/resources/bread.png"));
-        ItemStack itemStack = new ItemStack(Items.BREAD);
+        BufferedImage itemImage = RenderTestHelper.getItemImage("bread");
+        SingleItemInfo itemInfo = SingleItemInfoTestHelper.createSimpleSingleItemInfo();
 
         // 1 digit count
-        itemStack.setCount(5);
-        ItemImageRender itemImageRender = new ItemImageRender(itemStack, itemImage);
+        itemInfo.setAmount(5);
+        ShowItemsMod.LOGGER.debug("Render item: {} ", itemInfo);
+        ItemImageRender itemImageRender = new ItemImageRender(itemInfo, itemImage);
         BufferedImage resultImage = itemImageRender.render();
-        saveTestImage(resultImage);
+        RenderTestHelper.saveTestImage(resultImage);
 
         // 2 digit count
-        itemStack.setCount(60);
-        itemImageRender = new ItemImageRender(itemStack, itemImage);
+        itemInfo.setAmount(60);
+        ShowItemsMod.LOGGER.debug("Render item: {} ", itemInfo);
+        itemImageRender = new ItemImageRender(itemInfo, itemImage);
         resultImage = itemImageRender.render();
-        saveTestImage(resultImage);
+        RenderTestHelper.saveTestImage(resultImage);
     }
 
     @Test
     void renderEnchantedItem() throws IOException {
-        BufferedImage itemImage = getItemImage("iron_sword");
-        ItemStack itemStack = RenderTestHelper.getEnchantedItemStack();
+        BufferedImage itemImage = RenderTestHelper.getItemImage("iron_sword");
 
-        ItemImageRender itemImageRender = new ItemImageRender(itemStack, itemImage);
+        SingleItemInfo itemInfo = SingleItemInfoTestHelper.createSingleToolItemInfoWithEnchantments();
+        itemInfo.setCurrentDurability(176);
+        ShowItemsMod.LOGGER.debug("Render item: {} ", itemInfo);
+        ItemImageRender itemImageRender = new ItemImageRender(itemInfo, itemImage);
         BufferedImage resultImage = itemImageRender.render();
-        saveTestImage(resultImage);
-    }
+        RenderTestHelper.saveTestImage(resultImage);
 
-    void saveTestImage(BufferedImage image) throws IOException {
-        outputImageCounter++;
-        RenderTestHelper.saveTestImage(image, outputImageCounter);
+        itemImage = ImageIO.read(new File("src/test/resources/bread.png"));
+        itemInfo = SingleItemInfoTestHelper.createSimpleSingleItemInfoWithEnchantments();
+        ShowItemsMod.LOGGER.debug("Render item: {} ", itemInfo);
+        itemImageRender = new ItemImageRender(itemInfo, itemImage);
+        resultImage = itemImageRender.render();
+        RenderTestHelper.saveTestImage(resultImage);
     }
 }

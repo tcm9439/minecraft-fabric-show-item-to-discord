@@ -6,7 +6,11 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ShowItemsConfigLoaderTest {
+public class ShowItemsConfigLoaderTest {
+    public static void loadConfigForTest() {
+        File configFile = new File("run/config/show-items-config.json");
+        ShowItemsConfigManager.loadConfig(configFile.toPath(), path -> path);
+    }
 
     @Test
     void loadConfig() {

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ShowItemsDiscordBotTest {
     @BeforeAll
     static void loadConfig(){
-        File configFile = new File("run/config/ShowItems/show-items-config.json");
+        File configFile = new File("run/config/show-items-config.json");
         assertTrue(configFile.exists());
 
         ShowItemsConfigManager.loadConfig(configFile.toPath(), path -> path);

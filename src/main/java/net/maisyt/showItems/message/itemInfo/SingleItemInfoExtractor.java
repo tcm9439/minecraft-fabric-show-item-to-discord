@@ -28,12 +28,29 @@ public class SingleItemInfoExtractor implements IItemsInfoExtractor {
     public ItemsInfo extractItem(ItemStack selectedItemStack, SingleItemInfo singleItemInfo){
         singleItemInfo.setItemID(selectedItemStack.getItem().toString());
         singleItemInfo.setItemName(ItemUtil.getName(selectedItemStack));
+        singleItemInfo.setTranslationKey(selectedItemStack.getTranslationKey());
+
+        if (selectedItemStack.getItem() instanceof net.minecraft.item.BlockItem){
+            singleItemInfo.setItemType(ItemType.BLOCK);
+        } else {
+            singleItemInfo.setItemType(ItemType.ITEM);
+        }
 
         if (selectedItemStack.isDamageable()) {
             singleItemInfo.setMaxDurability(selectedItemStack.getMaxDamage());
             singleItemInfo.setCurrentDurability(selectedItemStack.getMaxDamage() - selectedItemStack.getDamage());
+            singleItemInfo.setItemType(ItemType.TOOL);
         } else {
             singleItemInfo.setAmount(selectedItemStack.getCount());
+        }
+
+        singleItemInfo.setStackable(selectedItemStack.isStackable());
+
+        if (selectedItemStack.hasNbt()){
+            int customModelData = selectedItemStack.getNbt().getInt("CustomModelData");
+            if (customModelData != 0){
+                singleItemInfo.setCustomModelData(customModelData);
+            }
         }
 
         // extract enchantments

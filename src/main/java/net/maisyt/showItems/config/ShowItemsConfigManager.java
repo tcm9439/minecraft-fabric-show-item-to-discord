@@ -7,6 +7,7 @@ import net.fabricmc.loader.impl.lib.gson.JsonReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -35,7 +36,6 @@ public class ShowItemsConfigManager {
         loadConfig(getConfigFilePath(), path -> PathUtil.getGameRootDirectory().resolve(path));
     }
 
-    // TODO reset token as I somehow push it to github :)
     static public void loadConfig(Path configPath, Function<Path, Path> pathResolver){
         File configFile = configPath.toFile();
         if (!configFile.exists()){
@@ -67,11 +67,11 @@ public class ShowItemsConfigManager {
      */
     public static boolean generateDefaultConfig(boolean overwrite){
         try {
-            Path defaultConfigPath = ShowItemsMod.readModResource("show-items-config.json");
+            InputStream defaultConfig = ShowItemsMod.getResource("show-items-config.json");
             Path configPath = getConfigFilePath();
 
             if (overwrite || !configPath.toFile().exists()){
-                Files.copy(defaultConfigPath, configPath, REPLACE_EXISTING);
+                Files.copy(defaultConfig, configPath, REPLACE_EXISTING);
             } else {
                 return false;
             }
@@ -80,6 +80,8 @@ public class ShowItemsConfigManager {
         }
         return true;
     }
+
+
 
     public static ShowItemsModConfig getModConfig() {
         return modConfig;

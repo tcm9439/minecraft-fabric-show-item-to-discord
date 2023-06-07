@@ -31,7 +31,7 @@ public class ServerLanguageManager {
                 resourcePacks.add(pack);
             }
         });
-        loadFromLanguagePack();
+        loadAllTranslationFromLanguagePack();
     }
 
     static public void init(String language, List<Path> languagePackPaths){
@@ -57,7 +57,7 @@ public class ServerLanguageManager {
      * Load all translation from the resource packs.
      * Support multiple namespace.
      */
-    public void loadFromLanguagePack(){
+    public void loadAllTranslationFromLanguagePack(){
         try {
             for (Resource pack : resourcePacks) {
                 try (pack){

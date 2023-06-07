@@ -22,12 +22,12 @@ public class ZipResource extends Resource {
     }
 
     public static String findRootDirectoryOfZippedPack(Path path) {
-        boolean exist = ZipUtil.checkIfDirectoryExist(path.toFile(), ResourceType.CLIENT_RESOURCES.getDirectory());
+        boolean exist = ZipUtil.checkIfRootDirectoryExist(path.toFile(), ResourceType.CLIENT_RESOURCES.getDirectory());
         if (exist) return null;
 
         String root = ZipUtil.getRootDirectory(path.toFile());
         String expectedEntryName = root + "/" + ResourceType.CLIENT_RESOURCES.getDirectory() + "/";
-        exist = ZipUtil.checkIfDirectoryExist(path.toFile(), expectedEntryName);
+        exist = ZipUtil.checkIfRootDirectoryExist(path.toFile(), expectedEntryName);
         if (!exist){
             throw new RuntimeException("The zip resource pack " +path.getFileName() + " does not contain the directory " + ResourceType.CLIENT_RESOURCES.getDirectory());
         }

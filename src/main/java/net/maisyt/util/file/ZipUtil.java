@@ -29,7 +29,7 @@ public class ZipUtil {
         return false;
     }
 
-    public static boolean checkIfDirectoryExist(File zipFile, String directoryPathInZip){
+    public static boolean checkIfRootDirectoryExist(File zipFile, String directoryPathInZip){
         ZipFile zip = null;
         try {
             zip = new ZipFile(zipFile, OPEN_READ);

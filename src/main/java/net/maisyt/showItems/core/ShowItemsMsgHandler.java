@@ -1,12 +1,16 @@
 package net.maisyt.showItems.core;
 
 import net.maisyt.showItems.ShowItemsMod;
+import net.maisyt.showItems.config.MessageMode;
+import net.maisyt.showItems.config.ShowItemsConfigManager;
+import net.maisyt.showItems.config.ShowItemsModConfig;
 import net.maisyt.showItems.discord.ShowItemsDiscordBot;
 import net.maisyt.showItems.message.ShowItemsMsgType;
 import net.maisyt.showItems.message.itemInfo.IItemsInfoExtractor;
 import net.maisyt.showItems.message.itemInfo.ItemsInfo;
 import net.maisyt.showItems.message.itemInfo.SingleItemInfoExtractor;
 import net.maisyt.showItems.message.renderer.IItemsMessageRenderer;
+import net.maisyt.showItems.message.renderer.SingleItemImageMessageRenderer;
 import net.maisyt.showItems.message.renderer.SingleItemTextMessageRenderer;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.GuildMessageChannel;
@@ -54,11 +58,15 @@ public class ShowItemsMsgHandler {
             IItemsInfoExtractor itemInfoExtractor = null;
             IItemsMessageRenderer messageRenderer = null;
 
-            // TODO set extractor & renderer according to msgType
+            MessageMode messageMode = ShowItemsConfigManager.getModConfig().getMessage().getMode();
             switch (msgType){
                 case SHOW_ITEM_IN_HAND:
                     itemInfoExtractor = new SingleItemInfoExtractor();
-                    messageRenderer = new SingleItemTextMessageRenderer();
+                    if (messageMode == MessageMode.IMAGE){
+                        messageRenderer = new SingleItemImageMessageRenderer();
+                    } else {
+                        messageRenderer = new SingleItemTextMessageRenderer();
+                    }
                     break;
 //                case SHOW_INVENTORY:
 //                    itemInfo = ItemInfoExtractor.(sender);

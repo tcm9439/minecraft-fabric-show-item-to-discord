@@ -9,7 +9,6 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.GuildMessageChannel;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
-import net.minecraft.text.Text;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -25,46 +24,46 @@ public class SingleItemTextMessageRenderer implements IItemsMessageRenderer {
     public Function<GuildMessageChannel, Mono<Message>> renderMessage(ItemsInfo itemsInfo) {
         SingleItemInfo singleItemInfo = (SingleItemInfo) itemsInfo;
 
-        ShowItemsMod.LOGGER.info("rendering single item message for {}", singleItemInfo);
+        ShowItemsMod.LOGGER.debug("rendering single item message for {}", singleItemInfo);
 
+        // get the message string from the config
         MessageConfig.showSingleItemMessageConfig msgConfig = ShowItemsConfigManager.getModConfig().getMessage().getShowSingleItemMessage();
+
+        // title: player's item
         Map<String, String> placeholderValues = new HashMap<>();
         placeholderValues.put(PLAYER_NAME_PLACEHOLDER, singleItemInfo.getPlayerName());
         String title = msgConfig.getTitle().format(placeholderValues);
 
-        String itemInfo;
-        try {
-            itemInfo = singleItemInfo.getItemName().getDisplayString();
-        } catch (Exception e){
-            ShowItemsMod.LOGGER.warn("failed to get item name string from {}", singleItemInfo.getItemName());
-            itemInfo = singleItemInfo.getItemID();
-        }
+        // item info: itemName xAmount
+        String itemInfo = singleItemInfo.getItemTranslatedName();
 
-        if (singleItemInfo.getAmount() > 1){
+        // iff the item is countable, append the amount
+        if (singleItemInfo.isStackable()){
             itemInfo += " x"+singleItemInfo.getAmount();
         }
 
+        // get tooltips
         String tooltips = getTooltips(singleItemInfo);
-        EmbedCreateSpec embed;
-        if (tooltips != null) {
-            embed = EmbedCreateSpec.builder()
-                    .color(msgConfig.getEmbedColor())
-                    .addField(title, itemInfo, false)
-                    .addField("Tooltips", tooltips, false) // todo make this configurable + remove it if there are no tooltips
-                    .build();
-        } else {
-            embed = EmbedCreateSpec.builder()
-                    .color(msgConfig.getEmbedColor())
-                    .addField(title, itemInfo, false)
-                    .build();
+
+        // build the embed
+        EmbedCreateSpec.Builder embedBuilder = EmbedCreateSpec.builder()
+                .color(msgConfig.getEmbedColor())
+                .addField(title, itemInfo, false);
+
+        if (tooltips != null && tooltips.length() > 0) {
+            embedBuilder.addField("", tooltips, false);
         }
 
-        EmbedCreateSpec finalEmbed = embed;
+        EmbedCreateSpec embed = embedBuilder.build();
+        // send out the message
         return channel -> channel.createMessage(MessageCreateSpec.builder()
-                .addEmbed(finalEmbed)
+                .addEmbed(embed)
                 .build());
     }
 
+    /**
+     * Generate a string paragraph from the tooltips Text list.
+     */
     public String getTooltips(SingleItemInfo singleItemInfo){
         List<String> tooltips = new ArrayList<>();
         List<net.maisyt.minecraft.util.text.Text> extractedTooltips = singleItemInfo.getTooltips();

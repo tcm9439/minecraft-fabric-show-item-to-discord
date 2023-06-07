@@ -6,6 +6,10 @@ import net.minecraft.util.Formatting;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The getDisplayString() will return a string with placeholder (%s, %d, %1$s, etc.).
+ * By then, the next (few) component will be used to replace the placeholder.
+ */
 public abstract class Text {
     private Style style;
     /**
@@ -45,7 +49,7 @@ public abstract class Text {
     public abstract String getRawDisplayString();
 
     public String getDisplayString(){
-        return getDisplayString(0, false);
+        return clearFormattingText(getDisplayString(0, false));
     }
 
     /**
@@ -74,10 +78,6 @@ public abstract class Text {
         return thisDisplayString;
     }
 
-    /**
-     * The getDisplayString() will return a string with placeholder (%s, %d, %1$s, etc.).
-     * By then, the next (few) component will be used to replace the placeholder.
-     */
     public boolean isWithPlaceHolder(String thisDisplayString) {
         return thisDisplayString.contains("%s");
     }
@@ -111,6 +111,10 @@ public abstract class Text {
     }
 
     public static Style getStyleFromFormattingText(String text, Style defaultStyle){
+        if (defaultStyle == null){
+            defaultStyle = Style.EMPTY;
+        }
+
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '§'){
                 Formatting formatting = Formatting.byCode(text.charAt(i + 1));
