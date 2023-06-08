@@ -152,6 +152,8 @@ public class MessageConfig {
     private showSingleItemMessageConfig showSingleItemMessage = new showSingleItemMessageConfig();
     private showInventoryMessageConfig showInventoryMessage = new showInventoryMessageConfig();
 
+    private String font;
+
     public MessageConfig() {}
 
     public MessageConfig(JsonReader reader) throws IOException {
@@ -164,6 +166,7 @@ public class MessageConfig {
                 case "stopMessage" -> setStopMessage(new StopMessageConfig(reader));
                 case "showSingleItemMessage" -> setShowSingleItemMessage(new showSingleItemMessageConfig(reader));
                 case "showInventoryMessage" -> setShowInventoryMessage(new showInventoryMessageConfig(reader));
+                case "font" -> setFont(reader.nextString());
                 default -> reader.skipValue();
             }
         }
@@ -176,6 +179,14 @@ public class MessageConfig {
 
     public void setMode(MessageMode mode) {
         this.mode = mode;
+    }
+
+    public String getFont() {
+        return font;
+    }
+
+    public void setFont(String font) {
+        this.font = font;
     }
 
     public StartMessageConfig getStartMessage() {

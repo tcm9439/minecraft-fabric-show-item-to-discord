@@ -64,4 +64,51 @@ public class SingleItemInfoTestHelper {
         itemInfo.setEnchantments(true);
         return itemInfo;
     }
+
+    /**
+     * Create a item with complex tooltips.
+     * Example from pangu map.
+     */
+    public static SingleItemInfo createComplexItemInfo(){
+        SingleItemInfo item = new SingleItemInfo();
+        item.setPlayerName("MaisyT");
+        item.setItemName(new TranslatableText("pl.item.name.sword4"));
+        item.setItemID("carrot_on_a_stick");
+        item.setTranslationKey("item.minecraft.carrot_on_a_stick");
+        item.setItemType(ItemType.ITEM);
+        item.setTooltips(List.of(
+                new TranslatableText("pl.lore.rare4"),
+                Text.createTranslatableText(new TranslatableText("pl.lore.limit0"),
+                    Text.createTranslatableText(new SimpleText("  "),
+                        new TranslatableText("pl.lore.limit_lvl_30"))),
+                new TranslatableText("pl.item.lore.sword4a"),
+                new TranslatableText("pl.item.lore.sword4b"),
+                new TranslatableText("pl.lore.weapon_attribute"),
+                Text.createTranslatableText(new TranslatableText("pl.attribute.weapon_attack0"),
+                    Text.createTranslatableText(new SimpleText("7.1", Style.EMPTY.withColor(Formatting.WHITE).withItalic(false)),
+                        Text.createTranslatableText(new SimpleText("  "),
+                            Text.createTranslatableText(new TranslatableText("pl.attribute.weapon_attack_speed"),
+                                    new SimpleText("1.6", Style.EMPTY.withColor(Formatting.WHITE).withItalic(false)))))),
+                new TranslatableText("pl.lore.warrior1"),
+                new TranslatableText("pl.lore.weapon_skill"),
+                new TranslatableText("pl.lore.weapon_skill.sword4.1"),
+                new TranslatableText("pl.lore.weapon_skill.sword4.2"),
+                new TranslatableText("pl.lore.weapon_skill.sword4.3"),
+                new TranslatableText("pl.lore.weapon_skill.sword4.4"),
+                new TranslatableText("pl.lore.weapon_skill.sword4.5"),
+                new TranslatableText("pl.lore.weapon_enhance"),
+                new TranslatableText("pl.lore.unlock_tag1"),
+                new TranslatableText("pl.lore.unlock_tag2"),
+                new TranslatableText("pl.lore.unlock_tag3"),
+                Text.createTranslatableText(new TranslatableText("pl.enchant"),
+                        new TranslatableText("pl.enchant.canenchant2")),
+                new TranslatableText("pl.lore.weapon_end"),
+                new TranslatableText("pl.lore.weaponinfo2a")
+        ));
+        item.setEnchantments(false);
+        item.setAmount(1);
+        item.setStackable(false);
+        item.setCustomModelData(24);
+        return item;
+    }
 }

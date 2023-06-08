@@ -7,12 +7,16 @@
   "texturePackPath": [
     "src/test/resources/lang-with-outer.zip"
   ],
+  "fontPath": [
+    "/System/Library/Fonts/PingFang.ttc"
+  ],
   "discord": {
     "serverToken": "3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji",
     "channelId": "12233525466224562"
   },
   "message": {
     "mode": "text",
+    "font": "PingFang",
     "startMessage": {
       "embedColor": "#61de2a",
       "message": "Show item bot is now online!"

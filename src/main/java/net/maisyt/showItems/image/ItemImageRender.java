@@ -60,11 +60,11 @@ public class ItemImageRender extends ImageRender<SingleItemInfo> {
             countXPos = TWO_DIGIT_COUNT_X_POS;
         }
 
-        g2d.setFont(new Font(FONT_NAME, Font.PLAIN, ITEM_COUNT_SHADOW_FONT_SIZE));
+        g2d.setFont(font.deriveFont(Font.PLAIN, ITEM_COUNT_SHADOW_FONT_SIZE));
         g2d.setColor(Color.BLACK);
         g2d.drawString(String.valueOf(itemCount), countXPos+SHIFT_OF_SHADOW, COUNT_Y_POS+SHIFT_OF_SHADOW);
 
-        g2d.setFont(new Font(FONT_NAME, Font.PLAIN, ITEM_COUNT_FONT_SIZE));
+        g2d.setFont(font.deriveFont(Font.PLAIN, ITEM_COUNT_FONT_SIZE));
         g2d.setColor(Color.WHITE);
         g2d.drawString(String.valueOf(itemCount), countXPos, COUNT_Y_POS);
 
@@ -72,9 +72,9 @@ public class ItemImageRender extends ImageRender<SingleItemInfo> {
     }
 
     private ItemImageRender renderEnchantment() {
-        if (!singleItemInfo.isStackable()){
-            return this;
-        }
+//        if (!singleItemInfo.isStackable()){
+//            return this;
+//        }
 
         ShowItemsMod.LOGGER.trace("Rendering enchantment image");
         BufferedImage outputImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);

@@ -15,7 +15,7 @@ public class ItemDescriptionRender extends ImageRender<SingleItemInfo> {
     private static final int FONT_SIZE = 16;
     private static final int FONT_SHIFT = FONT_SIZE/4;
     private static final int MARGIN = 4;
-    private static final int DESCRIPTION_IMAGE_WIDTH = 270; // todo: make this configurable
+    private static final int DESCRIPTION_IMAGE_WIDTH = 350; // todo: make this configurable
     private static final int BACKGROUND_FRAME_SHIFT = 1;
 
 
@@ -104,7 +104,7 @@ public class ItemDescriptionRender extends ImageRender<SingleItemInfo> {
             }
         }
 
-        g2d.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE).deriveFont(textAttributes));
+        g2d.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE).deriveFont(textAttributes));
         g2d.drawString(text.getDisplayString(), xPosition, yPosition);
     }
 }

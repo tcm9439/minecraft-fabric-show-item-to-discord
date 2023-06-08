@@ -5,18 +5,30 @@ import net.maisyt.showItems.ShowItemsMod;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Path;
 
 public abstract class ImageRender<T> {
-    static public String FONT_NAME = null;
-//    static public String FONT_NAME = "Courier";
+    static public Font font;
     protected BufferedImage renderedImage;
     protected Graphics2D g2d;
 
     public abstract BufferedImage render();
+
+    public static void init(java.util.List<Path> fontPaths, String fontName) {
+        ShowItemsMod.LOGGER.debug("Loading extra font.");
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        for (Path fontPath : fontPaths){
+            try {
+                Font newFont = Font.createFont(Font.TRUETYPE_FONT, fontPath.toFile());
+                ge.registerFont(newFont);
+            } catch (IOException|FontFormatException e) {
+                ShowItemsMod.LOGGER.error("Failed to load font from {}", fontPath, e);
+            }
+        }
+        // fontName is nullable
+        font = new Font(fontName, Font.PLAIN, 16);
+    }
 
     public static InputStream convertToInputStream(BufferedImage image) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();

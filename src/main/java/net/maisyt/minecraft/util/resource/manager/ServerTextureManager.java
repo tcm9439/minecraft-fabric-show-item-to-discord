@@ -101,6 +101,10 @@ public class ServerTextureManager {
                 ShowItemsMod.LOGGER.debug("Having custom model data: {}.", customModelData);
                 InputStream modelDataJsonStream = getResource(itemNamespace, String.format(ITEM_MODELS_PATH, itemName));
                 String textureId = getTextureIdFromModel(modelDataJsonStream, customModelData);
+                if (textureId == null){
+                    ShowItemsMod.LOGGER.debug("Cannot get texture id from model, skipping.");
+                    return getDummyTexture();
+                }
                 String[] splitTextureId = textureId.split(":");
                 if (splitTextureId.length != 2){
                     ShowItemsMod.LOGGER.debug("Not a valid texture id, skipping.");

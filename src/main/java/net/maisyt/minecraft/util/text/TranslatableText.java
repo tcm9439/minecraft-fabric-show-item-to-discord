@@ -11,13 +11,11 @@ public class TranslatableText extends Text {
     public TranslatableText(String translationKey, Formatting... format) {
         super(format);
         this.translationKey = translationKey;
-        setTranslated();
     }
 
     public TranslatableText(String translationKey, Style style) {
         super(style);
         this.translationKey = translationKey;
-        setTranslated();
     }
 
     public void setTranslated() {
@@ -26,13 +24,15 @@ public class TranslatableText extends Text {
             Style styleFromTranslatedText = getStyleFromFormattingText(translated, null);
             this.setStyle(styleFromTranslatedText.withParent(getStyle()));
             translated = clearFormattingText(translated);
+        } else {
+            translated = translationKey;
         }
     }
 
     @Override
     public String getRawDisplayString() {
         if (translated == null){
-            translated = ServerLanguageManager.getInstance().getTranslation(translationKey);
+            setTranslated();
         }
         return translated;
     }
@@ -43,8 +43,10 @@ public class TranslatableText extends Text {
 
     @Override
     public String toString() {
+        String next = hasNextComponent() ? getNextComponent().toString() : "null";
         return "TranslatableText{" +
-                "translationKey='" + translationKey + '\'' +
+                "translationKey='" + translationKey + "', " +
+                "next=" + next +
                 '}';
     }
 }

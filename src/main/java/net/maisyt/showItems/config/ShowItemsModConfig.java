@@ -21,7 +21,7 @@ public class ShowItemsModConfig {
 
     /**
      * The language code to used.
-     * https://minecraft.fandom.com/wiki/Language
+     * See <a href="https://minecraft.fandom.com/wiki/Language">Minecraft supported language code</a>.
      */
     private String language = "en_us";
 
@@ -31,6 +31,11 @@ public class ShowItemsModConfig {
      * If the path is invalid, item id / placeholder will be used.
      */
     private List<Path> languagePackPaths = new ArrayList<>();
+
+    /**
+     * The extra font to load.
+     */
+    private List<Path> fontPaths = new ArrayList<>();
 
     private DiscordBotConfig discordBot = null;
 
@@ -70,6 +75,25 @@ public class ShowItemsModConfig {
         reader.beginArray();
         while (reader.hasNext()) {
             addTexturePackPath(reader.nextString());
+        }
+        reader.endArray();
+    }
+
+    public List<Path> getFontPaths() {
+        return fontPaths;
+    }
+
+    public void addFontPath(String fontPath) {
+        if (fontPath == null || fontPath.isEmpty()){
+            return;
+        }
+        this.fontPaths.add(pathResolver.apply(Path.of(fontPath)));
+    }
+
+    public void loadFontPaths(JsonReader reader) throws IOException {
+        reader.beginArray();
+        while (reader.hasNext()) {
+            addFontPath(reader.nextString());
         }
         reader.endArray();
     }
@@ -144,6 +168,7 @@ public class ShowItemsModConfig {
                 case "languagePackPath" -> config.loadLanguagePackPaths(reader);
                 case "discord" -> config.setDiscordBot(DiscordBotConfig.load(reader));
                 case "message" -> config.setMessage(MessageConfig.load(reader));
+                case "fontPath" -> config.loadFontPaths(reader);
                 default -> reader.skipValue();
             }
         }

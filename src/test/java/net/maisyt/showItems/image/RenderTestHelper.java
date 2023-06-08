@@ -15,7 +15,7 @@ public class RenderTestHelper {
 
     static void setupResourceManager(){
         ShowItemsConfigLoaderTest.loadConfigForTest();
-        ServerTextureManager.setDummyTexture(Path.of("src/main/resources/dara/mt-show-items-to-discord/dummy_item_texture.png"));
+        ServerTextureManager.setDummyTexture(Path.of("src/main/resources/data/mt-show-items-to-discord/dummy_item_texture.png"));
         ServerTextureManager.setEnchantmentTexture(Path.of("src/main/resources/data/mt-show-items-to-discord/enchanted_item_glint.png"));
         ServerTextureManager.init(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
     }

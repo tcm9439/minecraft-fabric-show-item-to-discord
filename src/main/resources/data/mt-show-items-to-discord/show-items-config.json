@@ -1,11 +1,15 @@
 {
   "language": "en-US",
   "languagePackPath": [
-    "/run/resourcepacks/xxx.zip",
-    "/run/resourcepacks/xxx.json"
+    "xxx.zip",
+    "xxx.json"
   ],
   "texturePackPath": [
-    "/run/resourcepacks/xxx.zip"
+    "xxx.zip"
+  ],
+  "fontPath": [
+    "xxx.ttc",
+    "xxx.ttf"
   ],
   "discord": {
     "serverToken": "",
@@ -13,6 +17,7 @@
   },
   "message": {
     "mode": "text",
+    "font": "PingFang",
     "startMessage": {
       "embedColor": "#61de2a",
       "message": "Show item bot is now online!"

@@ -46,6 +46,14 @@ public abstract class Text {
         return nextComponent;
     }
 
+    public static Text createTranslatableText(Text text, Text nextComponent){
+        text.setNextComponent(nextComponent);
+        return text;
+    }
+
+    /**
+     * Get the "raw" display string: which do not include the next component and the formatting characters are not yet removed.
+     */
     public abstract String getRawDisplayString();
 
     public String getDisplayString(){
@@ -66,7 +74,7 @@ public abstract class Text {
         // skipCount == 0
         String thisDisplayString = getRawDisplayString();
         if (isWithPlaceHolder(thisDisplayString)){
-            if (hasNextComponent()){
+            if (!ignoreNextComponent && hasNextComponent()){
                 return parsePlaceHolder(thisDisplayString) + nextComponent.getDisplayString(countPlaceHolder(thisDisplayString), false);
             } else {
                 return parsePlaceHolder(thisDisplayString);
@@ -100,8 +108,14 @@ public abstract class Text {
         List<String> placeholderValues = new ArrayList<>();
         Text next = this;
         for (int i = 0; i < count; i++) {
-            next = next.getNextComponent();
-            placeholderValues.add(next.getDisplayString(0, true));
+            if (next != null){
+                next = next.getNextComponent();
+            }
+            if (next == null){
+                placeholderValues.add("");
+            } else {
+                placeholderValues.add(next.getDisplayString(0, true));
+            }
         }
         return placeholderValues;
     }

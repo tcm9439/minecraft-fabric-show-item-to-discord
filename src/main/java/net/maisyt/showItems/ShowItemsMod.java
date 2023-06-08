@@ -10,6 +10,7 @@ import net.maisyt.showItems.core.ShowItemsMsgHandler;
 import net.maisyt.showItems.discord.ShowItemsDiscordBot;
 import net.fabricmc.api.ModInitializer;
 
+import net.maisyt.showItems.image.ImageRender;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -89,6 +90,7 @@ public class ShowItemsMod implements ModInitializer {
 
                 if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
                     ServerTextureManager.init(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
+                    ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getFont());
                 }
 
                 ServerLanguageManager.init(ShowItemsConfigManager.getModConfig().getLanguage(),

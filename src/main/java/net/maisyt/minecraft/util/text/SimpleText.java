@@ -23,8 +23,10 @@ public class SimpleText extends Text {
 
     @Override
     public String toString() {
+        String next = hasNextComponent() ? getNextComponent().toString() : "null";
         return "SimpleText{" +
-                "content='" + content + '\'' +
+                "content='" + content + "', " +
+                "next=" + next +
                 '}';
     }
 }
