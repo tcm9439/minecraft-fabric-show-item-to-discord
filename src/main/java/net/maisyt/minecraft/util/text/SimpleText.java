@@ -26,6 +26,7 @@ public class SimpleText extends Text {
         String next = hasNextComponent() ? getNextComponent().toString() : "null";
         return "SimpleText{" +
                 "content='" + content + "', " +
+                "style=" + getStyle().toString() + ", " +
                 "next=" + next +
                 '}';
     }

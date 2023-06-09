@@ -44,13 +44,14 @@ public class SingleItemInfo extends ItemsInfo {
     /**
      * Create a countable / stackable item.
      */
-    public SingleItemInfo(String playerName, net.maisyt.minecraft.util.text.Text itemName, String itemTranslationKey, String itemID, boolean hasEnchantments, int amount, ItemType itemType){
+    public SingleItemInfo(String playerName, net.maisyt.minecraft.util.text.Text itemName, String itemTranslationKey, String itemID, boolean hasEnchantments, int amount, boolean stackable,ItemType itemType){
         this.playerName = playerName;
         this.itemName = itemName;
         this.itemID = itemID;
         this.translationKey = itemTranslationKey;
         this.hasEnchantments = hasEnchantments;
         this.amount = amount;
+        this.stackable = stackable;
         this.itemType = itemType;
     }
 
@@ -162,7 +163,7 @@ public class SingleItemInfo extends ItemsInfo {
         this.itemType = ItemType.TOOL;
     }
 
-    public boolean isHasEnchantments() {
+    public boolean hasEnchantments() {
         return hasEnchantments;
     }
 

@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 public class ItemImageRender extends ImageRender<SingleItemInfo> {
     private static final int RENDER_ITEM_IMAGE_LENGTH = 32;
-    private static final int RENDER_BACKGROUND_IMAGE_LENGTH = 34;
+    private static final int RENDER_BACKGROUND_IMAGE_LENGTH = 35;
     private static final int TWO_DIGIT_COUNT_X_POS = 16; // RENDER_ITEM_IMAGE_LENGTH/2
     private static final int ONE_DIGIT_COUNT_X_POS = 24; // RENDER_ITEM_IMAGE_LENGTH/4 * 3
     private static final int COUNT_Y_POS = RENDER_ITEM_IMAGE_LENGTH;
@@ -48,11 +48,12 @@ public class ItemImageRender extends ImageRender<SingleItemInfo> {
 
     private ItemImageRender renderItemCount() {
         int itemCount = singleItemInfo.getAmount();
-        ShowItemsMod.LOGGER.trace("Rendering item count: {}", itemCount);
-
-        if (!singleItemInfo.isStackable()) {
+        if (!singleItemInfo.isStackable() || itemCount <= 0) {
+            ShowItemsMod.LOGGER.trace("Item is not stackable, skip rendering item count");
             return this;
         }
+
+        ShowItemsMod.LOGGER.trace("Rendering item count: {}", itemCount);
 
         g2d.setPaintMode();
         int countXPos = ONE_DIGIT_COUNT_X_POS;
@@ -60,6 +61,7 @@ public class ItemImageRender extends ImageRender<SingleItemInfo> {
             countXPos = TWO_DIGIT_COUNT_X_POS;
         }
 
+        ShowItemsMod.LOGGER.trace("Font: {}", font);
         g2d.setFont(font.deriveFont(Font.PLAIN, ITEM_COUNT_SHADOW_FONT_SIZE));
         g2d.setColor(Color.BLACK);
         g2d.drawString(String.valueOf(itemCount), countXPos+SHIFT_OF_SHADOW, COUNT_Y_POS+SHIFT_OF_SHADOW);
@@ -72,11 +74,12 @@ public class ItemImageRender extends ImageRender<SingleItemInfo> {
     }
 
     private ItemImageRender renderEnchantment() {
-//        if (!singleItemInfo.isStackable()){
-//            return this;
-//        }
+        if (!singleItemInfo.hasEnchantments()) {
+            return this;
+        }
 
         ShowItemsMod.LOGGER.trace("Rendering enchantment image");
+
         BufferedImage outputImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) outputImage.getGraphics();
 
@@ -88,7 +91,7 @@ public class ItemImageRender extends ImageRender<SingleItemInfo> {
         g.drawImage(itemImage, 0, 0, 32, 32, 0, 0, 32, 32, null);
         g.dispose();
 
-        BufferedImage outputImage2 = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage outputImage2 = new BufferedImage(RENDER_BACKGROUND_IMAGE_LENGTH, RENDER_BACKGROUND_IMAGE_LENGTH, BufferedImage.TYPE_INT_ARGB);
         g2d = (Graphics2D) outputImage2.getGraphics();
         g2d.drawImage(itemImage, 0, 0, null);
         g2d.drawImage(outputImage, 0, 0, null);

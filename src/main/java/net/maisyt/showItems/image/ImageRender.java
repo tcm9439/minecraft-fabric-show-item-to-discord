@@ -30,6 +30,10 @@ public abstract class ImageRender<T> {
         font = new Font(fontName, Font.PLAIN, 16);
     }
 
+    public static void init(){
+        font = new Font(null, Font.PLAIN, 16);
+    }
+
     public static InputStream convertToInputStream(BufferedImage image) {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
@@ -41,6 +45,7 @@ public abstract class ImageRender<T> {
     }
 
     protected BufferedImage getFinalRenderedImage() {
+        ShowItemsMod.LOGGER.trace("Finalizing image. Size: {}x{}", renderedImage.getWidth(), renderedImage.getHeight());
         g2d.dispose();
         return renderedImage;
     }

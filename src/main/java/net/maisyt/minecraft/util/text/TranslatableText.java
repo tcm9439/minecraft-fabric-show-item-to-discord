@@ -46,6 +46,7 @@ public class TranslatableText extends Text {
         String next = hasNextComponent() ? getNextComponent().toString() : "null";
         return "TranslatableText{" +
                 "translationKey='" + translationKey + "', " +
+                "style=" + getStyle().toString() + ", " +
                 "next=" + next +
                 '}';
     }

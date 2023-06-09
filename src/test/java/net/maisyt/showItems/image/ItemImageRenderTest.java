@@ -15,6 +15,7 @@ class ItemImageRenderTest {
     @BeforeAll
     static void setup() {
         RenderTestHelper.setupResourceManager();
+        ImageRender.init();
     }
 
     @Test

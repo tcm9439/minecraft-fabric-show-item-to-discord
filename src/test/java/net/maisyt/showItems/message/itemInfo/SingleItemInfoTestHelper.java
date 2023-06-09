@@ -17,7 +17,7 @@ public class SingleItemInfoTestHelper {
                 new SimpleText("Item1"),
                 "item.minecraft.bread",
                 "minecraft:bread",
-                false, 3, ItemType.ITEM);
+                false, 3, true, ItemType.ITEM);
     }
 
     /**
@@ -26,7 +26,7 @@ public class SingleItemInfoTestHelper {
     public static SingleItemInfo createSimpleSingleItemInfoWithEnchantments(){
         SingleItemInfo itemInfo = createSimpleSingleItemInfo();
         itemInfo.setEnchantments(true);
-        itemInfo.setAmount(1);
+        itemInfo.setStackable(false);
         return itemInfo;
     }
 
