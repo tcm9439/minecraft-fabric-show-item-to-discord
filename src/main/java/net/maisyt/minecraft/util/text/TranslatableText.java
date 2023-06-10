@@ -35,8 +35,8 @@ public class TranslatableText extends Text {
     }
 
     @Override
-    public String getRawDisplayString() {
-        return getTranslated().getRawDisplayString();
+    public String getRawDisplayString(boolean substitutePlaceHolder) {
+        return getTranslated().getRawDisplayString(substitutePlaceHolder);
     }
 
     @Override

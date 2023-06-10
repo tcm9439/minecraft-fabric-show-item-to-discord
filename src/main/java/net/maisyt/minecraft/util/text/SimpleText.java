@@ -27,7 +27,10 @@ public class SimpleText extends Text {
     }
 
     @Override
-    public String getRawDisplayString() {
+    public String getRawDisplayString(boolean substitutePlaceHolder) {
+        if (substitutePlaceHolder && hasPlaceHolder(content)){
+            return getDisplayString(0, false, true);
+        }
         return content;
     }
 

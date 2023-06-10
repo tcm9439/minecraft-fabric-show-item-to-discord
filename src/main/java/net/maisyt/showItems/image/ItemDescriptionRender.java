@@ -87,35 +87,41 @@ public class ItemDescriptionRender extends ImageRender<SingleItemInfo> {
 
     private void drawText(Text text, int xPosition, int yPosition){
         Text textToDraw = text.getTextToDisplay();
+        int componentToSkip = 0;
 
-        // todo placeholder
         while (textToDraw != null) {
-            ShowItemsMod.LOGGER.trace("Drawing text: {} | First display string: {}", textToDraw, textToDraw.getRawDisplayString());
-            setPenColor(textToDraw);
+            if (componentToSkip > 0){
+                ShowItemsMod.LOGGER.trace("Skipping component: {}", textToDraw);
+                componentToSkip--;
+            } else {
+                componentToSkip = textToDraw.getPlaceholderCount();
+                String stringToDraw = textToDraw.getRawDisplayString(true);
+                ShowItemsMod.LOGGER.trace("Drawing text: {} | First display string: {}", textToDraw, stringToDraw);
+                setPenColor(textToDraw);
 
-            Map<TextAttribute, Object> textAttributes = new HashMap<>();
-            if (textToDraw.getStyle() != null) {
-                if (textToDraw.getStyle().isBold()) {
-                    textAttributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+                // get style
+                Map<TextAttribute, Object> textAttributes = new HashMap<>();
+                if (textToDraw.getStyle() != null) {
+                    if (textToDraw.getStyle().isBold()) {
+                        textAttributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+                    }
+                    if (textToDraw.getStyle().isItalic()) {
+                        textAttributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+                    }
+                    if (textToDraw.getStyle().isUnderlined()) {
+                        textAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                    }
+                    if (textToDraw.getStyle().isStrikethrough()) {
+                        textAttributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+                    }
                 }
-                if (textToDraw.getStyle().isItalic()) {
-                    textAttributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
-                }
-                if (textToDraw.getStyle().isUnderlined()) {
-                    textAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                }
-                if (textToDraw.getStyle().isStrikethrough()) {
-                    textAttributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-                }
+
+                int stringWidth = g2d.getFontMetrics().stringWidth(stringToDraw);
+                g2d.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE).deriveFont(textAttributes));
+                g2d.drawString(stringToDraw, xPosition, yPosition);
+
+                xPosition += stringWidth;
             }
-
-            String stringToDraw = textToDraw.getRawDisplayString();
-            int stringWidth = g2d.getFontMetrics().stringWidth(stringToDraw);
-
-            g2d.setFont(font.deriveFont(Font.PLAIN, FONT_SIZE).deriveFont(textAttributes));
-            g2d.drawString(stringToDraw, xPosition, yPosition);
-
-            xPosition += stringWidth;
 
             if (textToDraw.hasNextComponent()){
                 textToDraw = textToDraw.getNextComponent().getTextToDisplay();

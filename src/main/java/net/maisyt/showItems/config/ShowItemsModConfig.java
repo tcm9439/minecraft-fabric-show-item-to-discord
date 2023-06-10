@@ -2,6 +2,7 @@ package net.maisyt.showItems.config;
 
 import net.maisyt.showItems.ShowItemsMod;
 import net.fabricmc.loader.impl.lib.gson.JsonReader;
+import net.maisyt.util.file.FileType;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -132,11 +133,14 @@ public class ShowItemsModConfig {
             return false;
         }
 
-        // TODO check file type
         List<Path> pathToRemove = new ArrayList<>();
         for (Path path : texturePackPaths) {
             if (!path.toFile().exists()){
-                ShowItemsMod.LOGGER.info("Texture pack path {} is invalid. If no texture is found, dummy texture will be used.", path);
+                ShowItemsMod.LOGGER.info("Texture pack path {} is invalid. Ignore.", path);
+                pathToRemove.add(path);
+            }
+            if (FileType.getFileType(path) != FileType.ZIP){
+                ShowItemsMod.LOGGER.info("Texture pack path {} is not a zip file. Ignore.", path);
                 pathToRemove.add(path);
             }
         }

@@ -55,33 +55,32 @@ public abstract class Text {
     /**
      * Get the "raw" display string: which do not include the next component and the formatting characters are not yet removed.
      */
-    public abstract String getRawDisplayString();
+    public abstract String getRawDisplayString(boolean substitutePlaceHolder);
 
     public abstract Text getTextToDisplay();
 
     public String getFullDisplayString(){
-        return clearFormattingText(getDisplayString(0, false));
+        return getDisplayString(0, false, false);
     }
 
     /**
      * Recursion function. SkipCount is for skipping the elements that are used to replace the placeholders.
      */
-    private String getDisplayString(int skipCount, boolean ignoreNextComponent){
+    protected String getDisplayString(int skipCount, boolean ignoreNextComponent, boolean ignoreValueAfterPlaceHolder){
         if (skipCount > 0){
             if (!hasNextComponent()){
                 return "";
             }
-            return nextComponent.getDisplayString(skipCount - 1, false);
+            return nextComponent.getDisplayString(skipCount - 1, false, ignoreValueAfterPlaceHolder);
         }
 
-        // skipCount == 0
-        String thisDisplayString = getRawDisplayString();
+        // skipCount == 0, this Text is not skipped
+        String thisDisplayString = getRawDisplayString(false);
         if (hasPlaceHolder(thisDisplayString)){
-            if (!ignoreNextComponent && hasNextComponent()){
-                return parsePlaceHolder(thisDisplayString) + nextComponent.getDisplayString(countPlaceHolder(thisDisplayString), false);
-            } else {
-                return parsePlaceHolder(thisDisplayString);
+            if (!ignoreNextComponent && hasNextComponent() && !ignoreValueAfterPlaceHolder){
+                return parsePlaceHolder(thisDisplayString) + nextComponent.getDisplayString(countPlaceHolder(thisDisplayString), false, false);
             }
+            return parsePlaceHolder(thisDisplayString);
         }
         if (!ignoreNextComponent && hasNextComponent()){
             return thisDisplayString + nextComponent.getFullDisplayString();
@@ -94,14 +93,20 @@ public abstract class Text {
     }
 
     public static int countPlaceHolder(String thisDisplayString){
-        return thisDisplayString.length() - thisDisplayString.replace("%", "").length();
+        return thisDisplayString.length() -
+                thisDisplayString.replace("%s", " ").replace("%d", " ").length();
+    }
+
+    public int getPlaceholderCount(){
+        return countPlaceHolder(getRawDisplayString(false));
     }
 
     public String parsePlaceHolder(String thisDisplayString){
         thisDisplayString = thisDisplayString.replace("%d", "%s");
         int placeholderCount = countPlaceHolder(thisDisplayString);
         if (placeholderCount == 1 && hasNextComponent()){
-            return String.format(thisDisplayString, nextComponent.getFullDisplayString());
+            String placeholderValue = nextComponent.getRawDisplayString(false);
+            return String.format(thisDisplayString, placeholderValue);
         }
         // multiple placeholders
         return String.format(thisDisplayString, getPlaceholderValues(placeholderCount).toArray(new Object[0]));
@@ -117,7 +122,7 @@ public abstract class Text {
             if (next == null){
                 placeholderValues.add("");
             } else {
-                placeholderValues.add(next.getDisplayString(0, true));
+                placeholderValues.add(next.getDisplayString(0, true, false));
             }
         }
         return placeholderValues;
