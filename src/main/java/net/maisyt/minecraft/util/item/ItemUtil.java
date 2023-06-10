@@ -51,12 +51,8 @@ public class ItemUtil {
                     .map(blockResult -> Lists.newArrayList(new TranslatableText(blockResult.blockState().getBlock().getTranslationKey(), Formatting.DARK_GRAY)),
                          tagResult -> tagResult.tag().stream().map(registryEntry -> (net.maisyt.minecraft.util.text.Text) new TranslatableText(registryEntry.value().getTranslationKey(), Formatting.DARK_GRAY)).toList());
 
-//            BlockArgumentParser.blockOrTag(Registries.BLOCK.getReadOnlyWrapper(), tag, true)
-//                    .map(blockResult -> Lists.newArrayList(blockResult.blockState().getBlock().getName().formatted(Formatting.DARK_GRAY)),
-//                    tagResult -> tagResult.tag().stream().map(registryEntry -> ((Block)registryEntry.value()).getName().formatted(Formatting.DARK_GRAY)).collect(Collectors.toList()));
-
         } catch (CommandSyntaxException commandSyntaxException) {
-            return Lists.newArrayList(new SimpleText("UNKNOWN", Formatting.DARK_GRAY));
+            return Lists.newArrayList(SimpleText.create("UNKNOWN", Formatting.DARK_GRAY));
         }
     }
 
@@ -187,9 +183,9 @@ public class ItemUtil {
                         net.maisyt.minecraft.util.text.Text modifierText;
 
                         if (isAttackDamageOrSpeedModifier) {
-                            modifierText = new SimpleText(" ")
+                            modifierText = SimpleText.create(" ")
                                     .setNextComponent(new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.DARK_GREEN))
-                                    .setNextComponent(new SimpleText(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
+                                    .setNextComponent(SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
                                     .setNextComponent(new TranslatableText(entry.getKey().getTranslationKey())));
                             modifiersList.add(modifierText);
 //=                            Text.literal(" ").append(Text.translatable("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(),
@@ -198,7 +194,7 @@ public class ItemUtil {
                             // modifier with positive value (beneficial)
                             if (entityAttributeModifierValue > 0.0) {
                                 modifierText = new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.BLUE)
-                                                .setNextComponent(new SimpleText(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
+                                                .setNextComponent(SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
                                                 .setNextComponent(new TranslatableText(entry.getKey().getTranslationKey())));
                                 modifiersList.add(modifierText);
 //                                tooltipsList.add(Text.translatable("attribute.modifier.plus." + entityAttributeModifier.getOperation().getId(),
@@ -206,7 +202,7 @@ public class ItemUtil {
                             } else if ((entityAttributeModifierValue < 0.0)) {
                                 // modifier with negative value (harmful)
                                 modifierText = new TranslatableText("attribute.modifier.take." + entityAttributeModifier.getOperation().getId(), Formatting.BLUE)
-                                        .setNextComponent(new SimpleText(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
+                                        .setNextComponent(SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
                                                 .setNextComponent(new TranslatableText(entry.getKey().getTranslationKey())));
 
                                 modifiersList.add(modifierText);
@@ -220,7 +216,7 @@ public class ItemUtil {
                     // don't show the slot indicator text, e.g. "when in main hand:" if no modifiers to print
                     if (modifiersList.size() > 0){
                         // with modifiers, add a new line
-                        tooltipsList.add(new SimpleText(""));
+                        tooltipsList.add(SimpleText.create(""));
                         // add "when in main hand:"
                         tooltipsList.add(new TranslatableText("item.modifiers." + equipmentSlot.getName(), Formatting.GRAY));
                         // add all modifiers
@@ -238,7 +234,7 @@ public class ItemUtil {
                 }
                 if (isSectionVisible(hideFlags, ItemStack.TooltipSection.CAN_DESTROY) && itemStack.getNbt().contains(CAN_DESTROY_KEY, NbtElement.LIST_TYPE) &&
                         !(attributeNbtList = itemStack.getNbt().getList(CAN_DESTROY_KEY, NbtElement.STRING_TYPE)).isEmpty()) {
-                    tooltipsList.add(new SimpleText(""));
+                    tooltipsList.add(SimpleText.create(""));
                     tooltipsList.add(new TranslatableText("item.canBreak", Formatting.GRAY));
                     for (int k = 0; k < attributeNbtList.size(); ++k) {
                         tooltipsList.addAll(parseBlockTag(attributeNbtList.getString(k)));
@@ -246,7 +242,7 @@ public class ItemUtil {
                 }
                 if (isSectionVisible(hideFlags, ItemStack.TooltipSection.CAN_PLACE) && itemStack.getNbt().contains(CAN_PLACE_ON_KEY, NbtElement.LIST_TYPE) &&
                         !(attributeNbtList = itemStack.getNbt().getList(CAN_PLACE_ON_KEY, NbtElement.STRING_TYPE)).isEmpty()) {
-                    tooltipsList.add(new SimpleText(""));
+                    tooltipsList.add(SimpleText.create(""));
                     tooltipsList.add(new TranslatableText("item.canPlace", Formatting.GRAY));
                     for (int k = 0; k < attributeNbtList.size(); ++k) {
                         tooltipsList.addAll(parseBlockTag(attributeNbtList.getString(k)));
@@ -257,7 +253,7 @@ public class ItemUtil {
             // durability
             if (itemStack.isDamaged()) {
                 tooltipsList.add(new TranslatableText("item.durability")
-                        .setNextComponent(new SimpleText(String.format(" %d/%d", itemStack.getMaxDamage() - itemStack.getDamage(), itemStack.getMaxDamage()))));
+                        .setNextComponent(SimpleText.create(String.format(" %d/%d", itemStack.getMaxDamage() - itemStack.getDamage(), itemStack.getMaxDamage()))));
             }
 
             // if item is disabled

@@ -12,7 +12,7 @@ import java.util.Map;
 public class TextFactory {
     static Gson gson = new GsonBuilder().setLenient().create();
     /**
-     * Create a Text from a json NBT string.
+     * Create a Text from a json NBT string with the given base style.
      *
      * Example input:
      *      {"translate":"pl.item.name.sword4"}                                 => TranslatableText
@@ -26,7 +26,7 @@ public class TextFactory {
      *      with placeholder:
      *      [{"translate":"近戰傷害 +%s"},{"text":"7.1"}]
      */
-    public static Text createTextFromJsonNBT(String jsonNBT, Style defaultStyle) {
+    public static Text createTextFromJsonNBT(String jsonNBT, Style baseStyle) {
         // add [] if it is missing
         if (!jsonNBT.startsWith("[")) {
             jsonNBT = "[" + jsonNBT + "]";
@@ -37,12 +37,12 @@ public class TextFactory {
 
         if (listOfNbtMap.size() == 1) {
             // single component
-            return createSingleText(listOfNbtMap.get(0), defaultStyle);
+            return createText(listOfNbtMap.get(0), baseStyle);
         } else {
             // multiple component on the same line
             Text firstText = null, lastText = null;
             for (Map<String,Object> nbtMap : listOfNbtMap) {
-                Text text = createSingleText(nbtMap, defaultStyle);
+                Text text = createText(nbtMap, baseStyle);
                 if (text == null) {
                     continue;
                 }
@@ -57,28 +57,34 @@ public class TextFactory {
         }
     }
 
+    /**
+     * Create a Text from a json NBT string with no base style.
+     */
     public static Text createTextFromJsonNBT(String jsonNBT){
         return createTextFromJsonNBT(jsonNBT, Style.EMPTY);
     }
 
-    public static Text createSingleText(Map<String, Object> nbt, Style defaultStyle){
+    /**
+     * Create a Text from a NBT map.
+     */
+    public static Text createText(Map<String, Object> nbt, Style baseStyle){
         if (nbt.containsKey("italic")) {
-            defaultStyle = defaultStyle.withItalic((Boolean) nbt.get("italic"));
+            baseStyle = baseStyle.withItalic((Boolean) nbt.get("italic"));
         }
         if (nbt.containsKey("obfuscated")) {
-            defaultStyle = defaultStyle.withObfuscated((Boolean) nbt.get("obfuscated"));
+            baseStyle = baseStyle.withObfuscated((Boolean) nbt.get("obfuscated"));
         }
         if (nbt.containsKey("color")) {
-            defaultStyle = defaultStyle.withColor(TextColor.parse((String) nbt.get("color")));
+            baseStyle = baseStyle.withColor(TextColor.parse((String) nbt.get("color")));
         }
         if (nbt.containsKey("bold")) {
-            defaultStyle = defaultStyle.withBold((Boolean) nbt.get("bold"));
+            baseStyle = baseStyle.withBold((Boolean) nbt.get("bold"));
         }
         if (nbt.containsKey("underlined")) {
-            defaultStyle = defaultStyle.withUnderline((Boolean) nbt.get("underlined"));
+            baseStyle = baseStyle.withUnderline((Boolean) nbt.get("underlined"));
         }
         if (nbt.containsKey("strikethrough")) {
-            defaultStyle = defaultStyle.withStrikethrough((Boolean) nbt.get("strikethrough"));
+            baseStyle = baseStyle.withStrikethrough((Boolean) nbt.get("strikethrough"));
         }
 
         String content;
@@ -90,13 +96,10 @@ public class TextFactory {
             return null;
         }
 
-        Style style = Text.getStyleFromFormattingText(content, defaultStyle);
-        content = Text.clearFormattingText(content);
-
         if (nbt.containsKey("translate")) {
-            return new TranslatableText(content, style);
+            return new TranslatableText(content, baseStyle);
         } else {
-            return new SimpleText(content, style);
+            return SimpleText.create(content, baseStyle);
         }
     }
 }

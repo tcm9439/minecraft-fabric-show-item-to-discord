@@ -6,7 +6,7 @@ import net.minecraft.util.Formatting;
 
 public class TranslatableText extends Text {
     private final String translationKey;
-    private String translated = null;
+    private SimpleText translated = null;
 
     public TranslatableText(String translationKey, Formatting... format) {
         super(format);
@@ -19,22 +19,29 @@ public class TranslatableText extends Text {
     }
 
     public void setTranslated() {
-        translated = ServerLanguageManager.getInstance().getTranslation(translationKey);
-        if (translated != null){
-            Style styleFromTranslatedText = getStyleFromFormattingText(translated, null);
-            this.setStyle(styleFromTranslatedText.withParent(getStyle()));
-            translated = clearFormattingText(translated);
+        String translatedString = ServerLanguageManager.getInstance().getTranslation(translationKey);
+        if (translatedString != null){
+            translated = extractStyleFromTextString(translatedString, getStyle(), getNextComponent());
         } else {
-            translated = translationKey;
+            translated = SimpleText.create(translationKey);
         }
     }
 
-    @Override
-    public String getRawDisplayString() {
+    public SimpleText getTranslated() {
         if (translated == null){
             setTranslated();
         }
         return translated;
+    }
+
+    @Override
+    public String getRawDisplayString() {
+        return getTranslated().getRawDisplayString();
+    }
+
+    @Override
+    public Text getTextToDisplay() {
+        return getTranslated();
     }
 
     public String getTranslationKey() {

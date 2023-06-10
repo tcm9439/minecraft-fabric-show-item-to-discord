@@ -14,7 +14,7 @@ public class SingleItemInfoTestHelper {
      */
     public static SingleItemInfo createSimpleSingleItemInfo(){
         return new SingleItemInfo("Player1",
-                new SimpleText("Item1"),
+                SimpleText.create("Item1"),
                 "item.minecraft.bread",
                 "minecraft:bread",
                 false, 3, true, ItemType.ITEM);
@@ -40,10 +40,10 @@ public class SingleItemInfoTestHelper {
         Style style4 = Style.EMPTY.withStrikethrough(true).withColor(Formatting.YELLOW);
         Style style5 = Style.EMPTY.withColor(Formatting.GRAY);
         List<Text> tooltips = List.of(
-                new SimpleText("tooltip1", style),
-                new SimpleText("1234567890123456789012345678901234567890", style2),
-                new SimpleText("§8==========§2§l§n強化特性§8===========", style3),
-                new SimpleText("あいうえお", style4),
+                SimpleText.create("tooltip1", style),
+                SimpleText.create("1234567890123456789012345678901234567890", style2),
+                SimpleText.create("§8==========§2§l§n強化特性§8===========", style3),
+                SimpleText.create("あいうえお", style4),
                 new TranslatableText("item.minecraft.iron_sword", style5)
         );
 
@@ -79,16 +79,16 @@ public class SingleItemInfoTestHelper {
         item.setTooltips(List.of(
                 new TranslatableText("pl.lore.rare4"),
                 Text.createTranslatableText(new TranslatableText("pl.lore.limit0"),
-                    Text.createTranslatableText(new SimpleText("  "),
+                    Text.createTranslatableText(SimpleText.create("  "),
                         new TranslatableText("pl.lore.limit_lvl_30"))),
                 new TranslatableText("pl.item.lore.sword4a"),
                 new TranslatableText("pl.item.lore.sword4b"),
                 new TranslatableText("pl.lore.weapon_attribute"),
                 Text.createTranslatableText(new TranslatableText("pl.attribute.weapon_attack0"),
-                    Text.createTranslatableText(new SimpleText("7.1", Style.EMPTY.withColor(Formatting.WHITE).withItalic(false)),
-                        Text.createTranslatableText(new SimpleText("  "),
+                    Text.createTranslatableText(SimpleText.create("7.1", Style.EMPTY.withColor(Formatting.WHITE).withItalic(false)),
+                        Text.createTranslatableText(SimpleText.create("  "),
                             Text.createTranslatableText(new TranslatableText("pl.attribute.weapon_attack_speed"),
-                                    new SimpleText("1.6", Style.EMPTY.withColor(Formatting.WHITE).withItalic(false)))))),
+                                    SimpleText.create("1.6", Style.EMPTY.withColor(Formatting.WHITE).withItalic(false)))))),
                 new TranslatableText("pl.lore.warrior1"),
                 new TranslatableText("pl.lore.weapon_skill"),
                 new TranslatableText("pl.lore.weapon_skill.sword4.1"),

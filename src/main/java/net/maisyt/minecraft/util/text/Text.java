@@ -1,5 +1,6 @@
 package net.maisyt.minecraft.util.text;
 
+import net.maisyt.showItems.ShowItemsMod;
 import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
@@ -55,6 +56,8 @@ public abstract class Text {
      * Get the "raw" display string: which do not include the next component and the formatting characters are not yet removed.
      */
     public abstract String getRawDisplayString();
+
+    public abstract Text getTextToDisplay();
 
     public String getDisplayString(){
         return clearFormattingText(getDisplayString(0, false));
@@ -124,19 +127,87 @@ public abstract class Text {
         return text.replaceAll("§.", "");
     }
 
-    public static Style getStyleFromFormattingText(String text, Style defaultStyle){
-        if (defaultStyle == null){
-            defaultStyle = Style.EMPTY;
+    public static boolean containsFormattingText(String text){
+        return text.contains("§");
+    }
+
+    /**
+     * Extract the style from the string with formatting code, and set the Text to a chain of Text with the style.
+     *
+     * Formatting code rules for JAVA: Ref: <a href="https://minecraft.fandom.com/wiki/Formatting_codes">Minecraft Wiki</a> <br>
+     *  - If a color code is used after a formatting code, the formatting code is disabled beyond the color code point.
+     *  - §r resets the styles of following characters
+     *
+     * @return a "chained" SimpleText
+     */
+    public static SimpleText extractStyleFromTextString(String formattedString, Style baseStyle, Text oriNexComponent){
+        if (baseStyle == null){
+            baseStyle = Style.EMPTY;
         }
 
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '§'){
-                Formatting formatting = Formatting.byCode(text.charAt(i + 1));
-                if (formatting != null){
-                    defaultStyle = defaultStyle.withFormatting(formatting);
+        if (!containsFormattingText(formattedString)){
+            return new SimpleText(formattedString, baseStyle);
+        }
+
+        // handle the formatting code
+        Style currentStyle = baseStyle;
+        StringBuilder currentContent = new StringBuilder();
+        Style nextStyleBuffer = Style.EMPTY;
+        SimpleText firstText = null;
+        SimpleText lastText = null;
+        boolean needToCreateNewText = false;
+
+        for (int i = 0; i <= formattedString.length(); i++) {
+            if (i == formattedString.length()){
+                // reaching the end of the string, save the current Text
+                needToCreateNewText = true;
+            } else if (formattedString.charAt(i) == '§'){
+                Formatting format = Formatting.byCode(formattedString.charAt(i + 1));
+                i++; // skip the next character as it is part of the formatting code
+                if (format != null){
+                    if (format.isColor() || format == Formatting.RESET) {
+                        // the style is cleared, need to create a new Text for the new style
+                        needToCreateNewText = true;
+                        nextStyleBuffer = Style.EMPTY.withFormatting(format);
+                    } else {
+                        // apply the style
+                        currentStyle = currentStyle.withFormatting(format);
+                    }
                 }
+            } else {
+                currentContent.append(formattedString.charAt(i));
+            }
+
+            if (needToCreateNewText){
+                // save the current Text
+                if (currentContent.length() > 0 || firstText != null){
+                    SimpleText currentText = new SimpleText(currentContent.toString(), currentStyle);
+                    if (firstText == null){
+                        firstText = currentText;
+                    }
+                    if (lastText != null){
+                        lastText.setNextComponent(currentText);
+                    }
+                    lastText = currentText;
+                }
+
+                // reset the style & content
+                currentStyle = nextStyleBuffer;
+                currentContent = new StringBuilder();
+                nextStyleBuffer = Style.EMPTY;
+                needToCreateNewText = false;
             }
         }
-        return defaultStyle;
+
+        if (firstText == null){
+            firstText = new SimpleText(formattedString, baseStyle);
+        }
+
+        if (oriNexComponent != null){
+            lastText.setNextComponent(oriNexComponent);
+        }
+
+        ShowItemsMod.LOGGER.debug("Text after extracting formatting code: {}", firstText);
+        return firstText;
     }
 }
