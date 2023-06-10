@@ -111,4 +111,32 @@ public class SingleItemInfoTestHelper {
         item.setCustomModelData(24);
         return item;
     }
+
+    public static SingleItemInfo createComplexItemInfo2(){
+        SingleItemInfo item = new SingleItemInfo();
+        item.setPlayerName("MaisyT");
+        item.setItemName(new TranslatableText("item.minecraft.diamond_pickaxe"));
+        item.setItemID("diamond_pickaxe");
+        item.setTranslationKey("item.minecraft.diamond_pickaxe");
+        item.setItemType(ItemType.ITEM);
+        item.setTooltips(List.of(
+                SimpleText.create(""),
+                new TranslatableText("item.modifiers.mainhand"),
+                Text.createText(SimpleText.create(" "),
+                    new TranslatableText("attribute.modifier.equals.0"),
+                        SimpleText.create("5"),
+                            new TranslatableText("attribute.name.generic.attack_damage")),
+                Text.createText(SimpleText.create(" "),
+                    new TranslatableText("attribute.modifier.equals.0"),
+                        SimpleText.create("1.2"),
+                            new TranslatableText("attribute.name.generic.attack_speed")),
+                SimpleText.create(""),
+                new TranslatableText("item.canBreak"),
+                new TranslatableText("block.minecraft.acacia_log")
+        ));
+        item.setEnchantments(false);
+        item.setAmount(1);
+        item.setStackable(false);
+        return item;
+    }
 }

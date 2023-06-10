@@ -22,7 +22,7 @@ public class ServerTextureManager {
     private static ServerTextureManager instance;
     private static final String ITEM_TEXTURE_PATH = "textures/item/%s.png";
     private static final String ITEM_TEXTURE_PATH_FOR_ITEM_FROM_MODEL = "textures/%s.png";
-    private static final String BLOCK_ITEM_TEXTURE_PATH = "textures/block/%s.png";
+//    private static final String BLOCK_ITEM_TEXTURE_PATH = "textures/block/%s.png";
     private static final String ITEM_MODELS_PATH = "models/item/%s.json";
     private static BufferedImage dummyTexture;
     private static BufferedImage enchantmentTexture;

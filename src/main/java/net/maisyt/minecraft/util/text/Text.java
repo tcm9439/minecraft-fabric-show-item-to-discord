@@ -129,7 +129,8 @@ public abstract class Text {
             if (next == null){
                 placeholderValues.add("");
             } else {
-                placeholderValues.add(next.getDisplayString(0, true, false));
+                String nextDisplayString = next.getRawDisplayString(false);
+                placeholderValues.add(nextDisplayString);
             }
         }
         return placeholderValues;
@@ -157,9 +158,6 @@ public abstract class Text {
             baseStyle = Style.EMPTY;
         }
 
-        if (!hasFormattingCode(formattedString)){
-            return new SimpleText(formattedString, baseStyle);
-        }
 
         // handle the formatting code
         Style currentStyle = baseStyle;
@@ -169,50 +167,59 @@ public abstract class Text {
         SimpleText lastText = null;
         boolean needToCreateNewText = false;
 
-        for (int i = 0; i <= formattedString.length(); i++) {
-            if (i == formattedString.length()){
-                // reaching the end of the string, save the current Text
-                needToCreateNewText = true;
-            } else if (formattedString.charAt(i) == '§'){
-                Formatting format = Formatting.byCode(formattedString.charAt(i + 1));
-                i++; // skip the next character as it is part of the formatting code
-                if (format != null){
-                    if (format.isColor() || format == Formatting.RESET) {
-                        // the style is cleared, need to create a new Text for the new style
-                        needToCreateNewText = true;
-                        nextStyleBuffer = Style.EMPTY.withFormatting(format);
-                    } else {
-                        // apply the style
-                        currentStyle = currentStyle.withFormatting(format);
+        if (hasFormattingCode(formattedString)) {
+            for (int i = 0; i <= formattedString.length(); i++) {
+                if (i == formattedString.length()) {
+                    // reaching the end of the string, save the current Text
+                    needToCreateNewText = true;
+                } else if (formattedString.charAt(i) == '§') {
+                    Formatting format = Formatting.byCode(formattedString.charAt(i + 1));
+                    i++; // skip the next character as it is part of the formatting code
+                    if (format != null) {
+                        if (format.isColor() || format == Formatting.RESET) {
+                            // the style is cleared, need to create a new Text for the new style
+                            needToCreateNewText = true;
+                            nextStyleBuffer = Style.EMPTY.withFormatting(format);
+                        } else {
+                            // apply the style
+                            currentStyle = currentStyle.withFormatting(format);
+                        }
                     }
-                }
-            } else {
-                currentContent.append(formattedString.charAt(i));
-            }
-
-            if (needToCreateNewText){
-                // save the current Text
-                if (currentContent.length() > 0 || firstText != null){
-                    SimpleText currentText = new SimpleText(currentContent.toString(), currentStyle);
-                    if (firstText == null){
-                        firstText = currentText;
-                    }
-                    if (lastText != null){
-                        lastText.setNextComponent(currentText);
-                    }
-                    lastText = currentText;
+                } else {
+                    currentContent.append(formattedString.charAt(i));
                 }
 
-                // reset the style & content
-                currentStyle = nextStyleBuffer;
-                currentContent = new StringBuilder();
-                nextStyleBuffer = Style.EMPTY;
-                needToCreateNewText = false;
+                if (needToCreateNewText) {
+                    // save the current Text
+                    if (currentContent.length() > 0 || firstText != null) {
+                        SimpleText currentText = new SimpleText(currentContent.toString(), currentStyle);
+                        if (firstText == null) {
+                            firstText = currentText;
+                        }
+                        if (lastText != null) {
+                            lastText.setNextComponent(currentText);
+                        }
+                        lastText = currentText;
+                    }
+
+                    // reset the style & content
+                    currentStyle = nextStyleBuffer;
+                    currentContent = new StringBuilder();
+                    nextStyleBuffer = Style.EMPTY;
+                    needToCreateNewText = false;
+                }
             }
+        } else {
+            // no formatting code
+            firstText = new SimpleText(formattedString, baseStyle);
         }
 
         if (firstText == null){
             firstText = new SimpleText(formattedString, baseStyle);
+        }
+
+        if (lastText == null){
+            lastText = firstText;
         }
 
         if (oriNextComponent != null){

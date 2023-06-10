@@ -1,6 +1,7 @@
 package net.maisyt.minecraft.util.text;
 
 import net.maisyt.minecraft.util.resource.manager.ServerLanguageManager;
+import net.maisyt.showItems.ShowItemsMod;
 import net.minecraft.text.Style;
 import net.minecraft.util.Formatting;
 
@@ -22,6 +23,7 @@ public class TranslatableText extends Text {
         String translatedString = ServerLanguageManager.getInstance().getTranslation(translationKey);
         if (translatedString != null){
             translated = extractStyleFromTextString(translatedString, getStyle(), getNextComponent());
+            ShowItemsMod.LOGGER.trace("Translated & style extracted: {} -> {}", translatedString, translated);
         } else {
             translated = SimpleText.create(translationKey);
         }

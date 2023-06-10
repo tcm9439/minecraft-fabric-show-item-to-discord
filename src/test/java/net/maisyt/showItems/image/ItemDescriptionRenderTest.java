@@ -41,4 +41,13 @@ class ItemDescriptionRenderTest {
         BufferedImage resultImage = imageRender.render();
         RenderTestHelper.saveTestImage(resultImage);
     }
+
+    @Test
+    void renderComplexText2() throws IOException {
+        SingleItemInfo itemInfo = SingleItemInfoTestHelper.createComplexItemInfo2();
+        ShowItemsMod.LOGGER.debug("Render item: {} ", itemInfo);
+        ItemDescriptionRender imageRender = new ItemDescriptionRender(itemInfo);
+        BufferedImage resultImage = imageRender.render();
+        RenderTestHelper.saveTestImage(resultImage);
+    }
 }
