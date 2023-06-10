@@ -74,7 +74,7 @@ public class SingleItemTextMessageRenderer implements IItemsMessageRenderer {
         for (net.maisyt.minecraft.util.text.Text tooltip : extractedTooltips){
             String tooltipString;
             try {
-                tooltipString = tooltip.getDisplayString();
+                tooltipString = tooltip.getFullDisplayString();
             } catch (Exception e){
                 ShowItemsMod.LOGGER.warn("failed to get tooltip string from {}", tooltip);
                 continue;

@@ -57,7 +57,7 @@ public class ItemDescriptionRender extends ImageRender<SingleItemInfo> {
 
         // set color
         drawText(singleItemInfo.getItemName(), MARGIN, MARGIN + FONT_SIZE);
-        g2d.drawString(singleItemInfo.getItemName().getDisplayString(), MARGIN, MARGIN + FONT_SIZE);
+        g2d.drawString(singleItemInfo.getItemName().getFullDisplayString(), MARGIN, MARGIN + FONT_SIZE);
         return this;
     }
 

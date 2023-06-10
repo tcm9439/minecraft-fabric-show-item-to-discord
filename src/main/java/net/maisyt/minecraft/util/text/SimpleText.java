@@ -20,7 +20,7 @@ public class SimpleText extends Text {
     }
 
     public void setContent(String content) {
-        if (containsFormattingText(content)) {
+        if (hasFormattingCode(content)) {
             throw new IllegalArgumentException("The content cannot contain formatting characters.");
         }
         this.content = content;

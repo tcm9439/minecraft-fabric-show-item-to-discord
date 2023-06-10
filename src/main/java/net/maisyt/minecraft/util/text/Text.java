@@ -59,7 +59,7 @@ public abstract class Text {
 
     public abstract Text getTextToDisplay();
 
-    public String getDisplayString(){
+    public String getFullDisplayString(){
         return clearFormattingText(getDisplayString(0, false));
     }
 
@@ -76,7 +76,7 @@ public abstract class Text {
 
         // skipCount == 0
         String thisDisplayString = getRawDisplayString();
-        if (isWithPlaceHolder(thisDisplayString)){
+        if (hasPlaceHolder(thisDisplayString)){
             if (!ignoreNextComponent && hasNextComponent()){
                 return parsePlaceHolder(thisDisplayString) + nextComponent.getDisplayString(countPlaceHolder(thisDisplayString), false);
             } else {
@@ -84,16 +84,16 @@ public abstract class Text {
             }
         }
         if (!ignoreNextComponent && hasNextComponent()){
-            return thisDisplayString + nextComponent.getDisplayString();
+            return thisDisplayString + nextComponent.getFullDisplayString();
         }
         return thisDisplayString;
     }
 
-    public boolean isWithPlaceHolder(String thisDisplayString) {
+    public static boolean hasPlaceHolder(String thisDisplayString) {
         return thisDisplayString.contains("%s");
     }
 
-    public int countPlaceHolder(String thisDisplayString){
+    public static int countPlaceHolder(String thisDisplayString){
         return thisDisplayString.length() - thisDisplayString.replace("%", "").length();
     }
 
@@ -101,7 +101,7 @@ public abstract class Text {
         thisDisplayString = thisDisplayString.replace("%d", "%s");
         int placeholderCount = countPlaceHolder(thisDisplayString);
         if (placeholderCount == 1 && hasNextComponent()){
-            return String.format(thisDisplayString, nextComponent.getDisplayString());
+            return String.format(thisDisplayString, nextComponent.getFullDisplayString());
         }
         // multiple placeholders
         return String.format(thisDisplayString, getPlaceholderValues(placeholderCount).toArray(new Object[0]));
@@ -127,7 +127,7 @@ public abstract class Text {
         return text.replaceAll("§.", "");
     }
 
-    public static boolean containsFormattingText(String text){
+    public static boolean hasFormattingCode(String text){
         return text.contains("§");
     }
 
@@ -140,12 +140,12 @@ public abstract class Text {
      *
      * @return a "chained" SimpleText
      */
-    public static SimpleText extractStyleFromTextString(String formattedString, Style baseStyle, Text oriNexComponent){
+    public static SimpleText extractStyleFromTextString(String formattedString, Style baseStyle, Text oriNextComponent){
         if (baseStyle == null){
             baseStyle = Style.EMPTY;
         }
 
-        if (!containsFormattingText(formattedString)){
+        if (!hasFormattingCode(formattedString)){
             return new SimpleText(formattedString, baseStyle);
         }
 
@@ -203,8 +203,8 @@ public abstract class Text {
             firstText = new SimpleText(formattedString, baseStyle);
         }
 
-        if (oriNexComponent != null){
-            lastText.setNextComponent(oriNexComponent);
+        if (oriNextComponent != null){
+            lastText.setNextComponent(oriNextComponent);
         }
 
         ShowItemsMod.LOGGER.debug("Text after extracting formatting code: {}", firstText);

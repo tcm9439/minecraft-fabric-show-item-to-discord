@@ -85,7 +85,7 @@ public class SingleItemInfo extends ItemsInfo {
 
     public String getItemTranslatedName(){
         try {
-            return getItemName().getDisplayString();
+            return getItemName().getFullDisplayString();
         } catch (Exception e){
             // fail to get translation, use id instead
             ShowItemsMod.LOGGER.warn("failed to get item name string from {}", getItemName());
