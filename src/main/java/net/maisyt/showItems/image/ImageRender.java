@@ -20,11 +20,14 @@ public abstract class ImageRender<T> {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         for (Path fontPath : fontPaths){
             try {
+                ShowItemsMod.LOGGER.debug("Loading font from {}", fontPath);
                 Font newFont = Font.createFont(Font.TRUETYPE_FONT, fontPath.toFile());
                 ge.registerFont(newFont);
             } catch (IOException|FontFormatException e) {
                 ShowItemsMod.LOGGER.error("Failed to load font from {}", fontPath, e);
             }
+            // print out all available fonts in a single line for debugging
+            ShowItemsMod.LOGGER.debug("Available fonts: {}", String.join(", ", ge.getAvailableFontFamilyNames()));
         }
         // fontName is nullable
         font = new Font(fontName, Font.PLAIN, 16);

@@ -42,13 +42,20 @@ public abstract class Text {
         return nextComponent;
     }
 
+    /**
+     * Set the next component and return the next component.
+     * @return nextComponent
+     */
     public Text setNextComponent(Text nextComponent) {
         this.nextComponent = nextComponent;
         return nextComponent;
     }
 
-    public static Text createTranslatableText(Text text, Text nextComponent){
-        text.setNextComponent(nextComponent);
+    public static Text createText(Text text, Text... nextComponent){
+        Text lastText = text;
+        for (Text component : nextComponent) {
+            lastText = lastText.setNextComponent(component);
+        }
         return text;
     }
 

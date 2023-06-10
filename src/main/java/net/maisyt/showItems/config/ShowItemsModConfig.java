@@ -88,7 +88,13 @@ public class ShowItemsModConfig {
         if (fontPath == null || fontPath.isEmpty()){
             return;
         }
-        this.fontPaths.add(pathResolver.apply(Path.of(fontPath)));
+        Path path = pathResolver.apply(Path.of(fontPath));
+        // check if file exists
+        if (path == null || !path.toFile().exists()){
+            ShowItemsMod.LOGGER.info("Font path {} is invalid. Ignore.", path);
+            return;
+        }
+        this.fontPaths.add(path);
     }
 
     public void loadFontPaths(JsonReader reader) throws IOException {

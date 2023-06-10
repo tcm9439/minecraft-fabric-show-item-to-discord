@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ServerMixin {
     @Inject(at = @At("TAIL"), method = "<init>")
     public void onStartServer(CallbackInfo info) {
-        ShowItemsMod.initMod();
+        ShowItemsMod.initModResources();
     }
 
     @Inject(method = "shutdown", at = @At("TAIL"))

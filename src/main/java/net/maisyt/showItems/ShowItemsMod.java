@@ -41,6 +41,7 @@ public class ShowItemsMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        // For accessing the resource in the jar
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
             @Override
             public CompletableFuture<Void> reload(Synchronizer synchronizer, ResourceManager manager, Profiler prepareProfiler, Profiler applyProfiler, Executor prepareExecutor, Executor applyExecutor) {
@@ -57,7 +58,7 @@ public class ShowItemsMod implements ModInitializer {
                 for (String resource : resources.keySet()) {
                     try {
                         LOGGER.info("Loading resource: {}", resource);
-                        resources.put(resource, manager.getResource(new Identifier(MOD_ID, resource)).get().getInputStream());
+                        resources.put(resource, manager.getResource(new Identifier(MOD_ID, resource)).orElseThrow().getInputStream());
                     } catch (IOException e) {
                         LOGGER.error("Failed to load resource: {}", resource, e);
                     }
@@ -81,20 +82,39 @@ public class ShowItemsMod implements ModInitializer {
         return resources.get(resource);
     }
 
-    public static void initMod(){
+    public static void initModResources(){
+        initModResources(false);
+    }
+
+    public static void initModResources(boolean reload){
         try {
             ShowItemsConfigManager.loadConfig();
             if (ShowItemsConfigManager.isEnable()){
+                // init discord bot
                 ShowItemsMod.LOGGER.info("Starting Discord bot.");
                 ShowItemsDiscordBot.createBot();
 
-                if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
-                    ServerTextureManager.init(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
-                    ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getFont());
-                }
+                if (reload){
+                    // ==== reload resource packs ====
+                    // reload texture packs if in image mode
+                    if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
+                        ServerTextureManager.reload(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
+                    }
+                    // reload language packs
+                    ServerLanguageManager.reload(ShowItemsConfigManager.getModConfig().getLanguage(),
+                            ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
+                } else {
+                    // ==== load resource packs ====
+                    // init texture packs if in image mode
+                    if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
+                        ServerTextureManager.init(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
+                        ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getFont());
+                    }
 
-                ServerLanguageManager.init(ShowItemsConfigManager.getModConfig().getLanguage(),
-                        ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
+                    // reload language packs
+                    ServerLanguageManager.init(ShowItemsConfigManager.getModConfig().getLanguage(),
+                            ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
+                }
             } else {
                 ShowItemsMod.LOGGER.debug("Discord bot is disabled.");
             }
@@ -119,15 +139,7 @@ public class ShowItemsMod implements ModInitializer {
         shutdownMod();
 
         // restart
-        initMod();
+        initModResources(true);
         ShowItemsMsgHandler.restart();
-
-        // reload resource packs
-        if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
-            ServerTextureManager.reload(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
-        }
-
-        ServerLanguageManager.reload(ShowItemsConfigManager.getModConfig().getLanguage(),
-                ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
     }
 }

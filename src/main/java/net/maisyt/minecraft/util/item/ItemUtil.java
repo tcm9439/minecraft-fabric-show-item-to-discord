@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.maisyt.minecraft.util.text.SimpleText;
+import net.maisyt.minecraft.util.text.Text;
 import net.maisyt.minecraft.util.text.TextFactory;
 import net.maisyt.minecraft.util.text.TranslatableText;
 import net.maisyt.showItems.ShowItemsMod;
@@ -182,32 +183,27 @@ public class ItemUtil {
 
                         net.maisyt.minecraft.util.text.Text modifierText;
 
+                        // todo fix bugs
                         if (isAttackDamageOrSpeedModifier) {
-                            modifierText = SimpleText.create(" ")
-                                    .setNextComponent(new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.DARK_GREEN))
-                                    .setNextComponent(SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
-                                    .setNextComponent(new TranslatableText(entry.getKey().getTranslationKey())));
+                            modifierText = Text.createText(SimpleText.create(" "),
+                                    new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.DARK_GREEN),
+                                        SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue)),
+                                            new TranslatableText(entry.getKey().getTranslationKey()));
                             modifiersList.add(modifierText);
-//=                            Text.literal(" ").append(Text.translatable("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(),
-//                                    ItemStack.MODIFIER_FORMAT.format(finalModifierValue), Text.translatable(entry.getKey().getTranslationKey()))).formatted(Formatting.DARK_GREEN));
                         } else {
                             // modifier with positive value (beneficial)
                             if (entityAttributeModifierValue > 0.0) {
-                                modifierText = new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.BLUE)
-                                                .setNextComponent(SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
-                                                .setNextComponent(new TranslatableText(entry.getKey().getTranslationKey())));
+                                modifierText = Text.createText(new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.BLUE),
+                                    SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue)),
+                                        new TranslatableText(entry.getKey().getTranslationKey()));
                                 modifiersList.add(modifierText);
-//                                tooltipsList.add(Text.translatable("attribute.modifier.plus." + entityAttributeModifier.getOperation().getId(),
-//                                        ItemStack.MODIFIER_FORMAT.format(finalModifierValue), Text.translatable(entry.getKey().getTranslationKey())).formatted(Formatting.BLUE));
                             } else if ((entityAttributeModifierValue < 0.0)) {
                                 // modifier with negative value (harmful)
-                                modifierText = new TranslatableText("attribute.modifier.take." + entityAttributeModifier.getOperation().getId(), Formatting.BLUE)
-                                        .setNextComponent(SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue))
-                                                .setNextComponent(new TranslatableText(entry.getKey().getTranslationKey())));
+                                modifierText = Text.createText(new TranslatableText("attribute.modifier.take." + entityAttributeModifier.getOperation().getId(), Formatting.BLUE),
+                                        SimpleText.create(ItemStack.MODIFIER_FORMAT.format(finalModifierValue)),
+                                                new TranslatableText(entry.getKey().getTranslationKey()));
 
                                 modifiersList.add(modifierText);
-//                                tooltipsList.add(Text.translatable("attribute.modifier.take." + entityAttributeModifier.getOperation().getId(),
-//                                        ItemStack.MODIFIER_FORMAT.format(finalModifierValue *= -1.0), Text.translatable(entry.getKey().getTranslationKey())).formatted(Formatting.RED));
                             }
                             // else, entityAttributeModifierValue == 0 => skip
                         }
