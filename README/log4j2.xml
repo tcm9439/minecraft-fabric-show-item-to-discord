@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" name="fabric-show-items" monitorInterval="60" shutdownHook="disable">
+    <Properties>
+        <Property name="logDir">logs/</Property>
+        <Property name="logName">mt-mod-trace</Property>
+    </Properties>
+    <Appenders>
+        <Console name="server-console">
+            <PatternLayout pattern="%d %-5level [%t] %C{1.} - %msg%n" />
+        </Console>
+        <RollingFile name="RootRollingFile" fileName="${logDir}/server.log" filePattern="${logDir}/server-%d{yyyyMMdd}-%i.log.gz" filePermissions="rw-r--r--" >
+            <PatternLayout pattern="%d %-5level [%t] %logger{1.} - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy  >
+                <Delete basePath="${logDir}" maxDepth="1">
+                    <IfFileName glob="*log.gz" />
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <RollingFile name="MTRollingFile" fileName="${logDir}/${logName}.log" filePattern="${logDir}/${logName}-%d{yyyyMMdd}-%i.log.gz" filePermissions="rw-r--r--" >
+            <PatternLayout pattern="%d %-5level [%t] %logger{1.} - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy  >
+                <Delete basePath="${logDir}" maxDepth="1">
+                    <IfFileName glob="*log.gz" />
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="server-console"/>
+            <AppenderRef ref="RootRollingFile"/>
+        </Root>
+        <logger name="mt-show-items-to-discord" level="TRACE" additivity="false">
+            <AppenderRef ref="MTRollingFile"/>
+        </logger>
+    </Loggers>
+</Configuration>

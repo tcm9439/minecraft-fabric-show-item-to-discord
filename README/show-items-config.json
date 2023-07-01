@@ -1,0 +1,37 @@
+{
+  "language": "zh_tw",
+  "languagePackPath": [
+    "resource/Pangu-Languagepack.zip",
+    "resource/minecraft-lang-1.19.3.zip"
+  ],
+  "texturePackPath": [
+    "resource/Pangu-Resourcepack.zip"
+  ],
+  "fontPath": [
+    "config/PingFang.ttc"
+  ],
+  "discord": {
+    "serverToken": "xxxxxxxxxxxxxxxxxxx.xxxxxxxxxx-xxx-xxxxx",
+    "channelId": "123213124194912649164"
+  },
+  "message": {
+    "mode": "image",
+	"image": {
+        "font": "PingFang HK",
+        "itemDescriptionImageWidth": 350
+    },
+    "startMessage": {
+      "embedColor": "#61de2a",
+      "message": ":green_circle: Show item bot is now online!"
+    },
+    "stopMessage": {
+      "embedColor": "#ff0000",
+      "message": ":red_circle: Show item bot is now offline."
+    },
+    "showSingleItemMessage": {
+      "embedColor": "#1260cc",
+      "title": "${PlayerName} 的物品",
+      "includeTooltips": true
+    }
+  }
+}
