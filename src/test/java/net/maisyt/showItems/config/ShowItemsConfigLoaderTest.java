@@ -36,7 +36,7 @@ public class ShowItemsConfigLoaderTest {
         assertEquals(1, config.getFontPaths().size());
         assertEquals("/System/Library/Fonts/PingFang.ttc", config.getFontPaths().get(0).toString());
 
-        assertEquals("3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji", config.getDiscordBot().getServerToken());
+        assertEquals("3425HIHE#HFdwbelwer.34thh.O#JEderrj@RUHE-M0WK-s4htiji", config.getDiscordBot().getBotToken());
         assertEquals("12233525466224562", config.getDiscordBot().getChannelId().asString());
 
         MessageConfig messageConfig = config.getMessage();

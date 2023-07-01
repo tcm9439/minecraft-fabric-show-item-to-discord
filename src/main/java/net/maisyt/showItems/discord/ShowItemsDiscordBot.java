@@ -42,7 +42,7 @@ public class ShowItemsDiscordBot {
 
     public ShowItemsDiscordBot(){
         channelID = ShowItemsConfigManager.getModConfig().getDiscordBot().getChannelId();
-        token = ShowItemsConfigManager.getModConfig().getDiscordBot().getServerToken();
+        token = ShowItemsConfigManager.getModConfig().getDiscordBot().getBotToken();
         client = createGatewayDiscordClient(token);
     }
 

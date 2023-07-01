@@ -6,17 +6,17 @@ import net.fabricmc.loader.impl.lib.gson.JsonReader;
 import java.io.IOException;
 
 public class DiscordBotConfig {
-    private String serverToken;
+    private String botToken;
     private Snowflake channelId;
 
     public DiscordBotConfig() {}
 
-    public String getServerToken() {
-        return serverToken;
+    public String getBotToken() {
+        return botToken;
     }
 
-    public void setServerToken(String serverToken) {
-        this.serverToken = serverToken;
+    public void setBotToken(String botToken) {
+        this.botToken = botToken;
     }
 
     public Snowflake getChannelId() {
@@ -28,7 +28,7 @@ public class DiscordBotConfig {
     }
 
     public boolean validate(){
-        return serverToken != null && !serverToken.isEmpty()
+        return botToken != null && !botToken.isEmpty()
                 && channelId != null && !channelId.asString().isEmpty();
     }
 
@@ -38,7 +38,7 @@ public class DiscordBotConfig {
         while (reader.hasNext()) {
             String name = reader.nextName();
             switch (name) {
-                case "serverToken" -> config.setServerToken(reader.nextString());
+                case "botToken" -> config.setBotToken(reader.nextString());
                 case "channelId" -> config.setChannelId(reader.nextString());
                 default -> reader.skipValue();
             }

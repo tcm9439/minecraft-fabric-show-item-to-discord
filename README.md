@@ -69,7 +69,7 @@ A full example at [here](./README/show-items-config.json).
   ],
   "discord": {
     # the discord bot setting
-    "serverToken": "xxxxxxxxxxxxxxxxxxx.xxxxxxxxxx-xxx-xxxxx",
+    "botToken": "xxxxxxxxxxxxxxxxxxx.xxxxxxxxxx-xxx-xxxxx",
     "channelId": "123213124194912649164"
   },
   "message": {

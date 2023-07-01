@@ -11,7 +11,7 @@
     "config/PingFang.ttc"
   ],
   "discord": {
-    "serverToken": "xxxxxxxxxxxxxxxxxxx.xxxxxxxxxx-xxx-xxxxx",
+    "botToken": "xxxxxxxxxxxxxxxxxxx.xxxxxxxxxx-xxx-xxxxx",
     "channelId": "123213124194912649164"
   },
   "message": {
