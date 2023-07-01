@@ -183,7 +183,6 @@ public class ItemUtil {
 
                         net.maisyt.minecraft.util.text.Text modifierText;
 
-                        // todo fix bugs
                         if (isAttackDamageOrSpeedModifier) {
                             modifierText = Text.createText(SimpleText.create(" "),
                                     new TranslatableText("attribute.modifier.equals." + entityAttributeModifier.getOperation().getId(), Formatting.DARK_GREEN),

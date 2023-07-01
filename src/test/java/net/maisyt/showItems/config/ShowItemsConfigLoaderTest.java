@@ -41,7 +41,8 @@ public class ShowItemsConfigLoaderTest {
 
         MessageConfig messageConfig = config.getMessage();
         assertEquals(MessageMode.TEXT, messageConfig.getMode());
-        assertEquals("PingFang", messageConfig.getFont());
+        assertEquals("PingFang", messageConfig.getImageConfig().getFont());
+        assertEquals(350, messageConfig.getImageConfig().getItemDescriptionImageWidth());
         assertEquals("Show item bot is now online!" ,messageConfig.getStartMessage().getMessage());
         assertEquals("我先下囉，拜～" ,messageConfig.getStopMessage().getMessage());
         assertEquals("${PlayerName}'s Item" ,messageConfig.getShowSingleItemMessage().getTitle().getStringWithPlaceholders());

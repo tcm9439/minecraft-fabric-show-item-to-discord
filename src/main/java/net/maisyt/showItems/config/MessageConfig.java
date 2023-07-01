@@ -146,13 +146,48 @@ public class MessageConfig {
         }
     }
 
+    public class ImageConfig {
+        int itemDescriptionImageWidth = 350;
+        String font;
+
+        public ImageConfig() {}
+
+        public ImageConfig(JsonReader reader) throws IOException {
+            reader.beginObject();
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                switch (name) {
+                    case "itemDescriptionImageWidth" -> setItemDescriptionImageWidth(reader.nextInt());
+                    case "font" -> setFont(reader.nextString());
+                    default -> reader.skipValue();
+                }
+            }
+            reader.endObject();
+        }
+
+        public int getItemDescriptionImageWidth() {
+            return itemDescriptionImageWidth;
+        }
+
+        public void setItemDescriptionImageWidth(int itemDescriptionImageWidth) {
+            this.itemDescriptionImageWidth = itemDescriptionImageWidth;
+        }
+
+        public String getFont() {
+            return font;
+        }
+
+        public void setFont(String font) {
+            this.font = font;
+        }
+    }
+
     private MessageMode mode = MessageMode.TEXT;
     private StartMessageConfig startMessage = new StartMessageConfig();
     private StopMessageConfig stopMessage = new StopMessageConfig();
     private showSingleItemMessageConfig showSingleItemMessage = new showSingleItemMessageConfig();
-    private showInventoryMessageConfig showInventoryMessage = new showInventoryMessageConfig();
-
-    private String font;
+//    private showInventoryMessageConfig showInventoryMessage = new showInventoryMessageConfig();
+    private ImageConfig imageConfig = new ImageConfig();
 
     public MessageConfig() {}
 
@@ -165,8 +200,8 @@ public class MessageConfig {
                 case "startMessage" -> setStartMessage(new StartMessageConfig(reader));
                 case "stopMessage" -> setStopMessage(new StopMessageConfig(reader));
                 case "showSingleItemMessage" -> setShowSingleItemMessage(new showSingleItemMessageConfig(reader));
-                case "showInventoryMessage" -> setShowInventoryMessage(new showInventoryMessageConfig(reader));
-                case "font" -> setFont(reader.nextString());
+//                case "showInventoryMessage" -> setShowInventoryMessage(new showInventoryMessageConfig(reader));
+                case "image" -> setImageConfig(new ImageConfig(reader));
                 default -> reader.skipValue();
             }
         }
@@ -179,14 +214,6 @@ public class MessageConfig {
 
     public void setMode(MessageMode mode) {
         this.mode = mode;
-    }
-
-    public String getFont() {
-        return font;
-    }
-
-    public void setFont(String font) {
-        this.font = font;
     }
 
     public StartMessageConfig getStartMessage() {
@@ -213,13 +240,13 @@ public class MessageConfig {
         this.showSingleItemMessage = showSingleItemMessage;
     }
 
-    public showInventoryMessageConfig getShowInventoryMessage() {
-        return showInventoryMessage;
-    }
-
-    public void setShowInventoryMessage(showInventoryMessageConfig showInventoryMessage) {
-        this.showInventoryMessage = showInventoryMessage;
-    }
+//    public showInventoryMessageConfig getShowInventoryMessage() {
+//        return showInventoryMessage;
+//    }
+//
+//    public void setShowInventoryMessage(showInventoryMessageConfig showInventoryMessage) {
+//        this.showInventoryMessage = showInventoryMessage;
+//    }
 
     /**
      * Convert a color code to a discord4j Color object.
@@ -238,5 +265,13 @@ public class MessageConfig {
 
     public static MessageConfig load(JsonReader reader) throws IOException {
         return new MessageConfig(reader);
+    }
+
+    public ImageConfig getImageConfig() {
+        return imageConfig;
+    }
+
+    public void setImageConfig(ImageConfig imageConfig) {
+        this.imageConfig = imageConfig;
     }
 }

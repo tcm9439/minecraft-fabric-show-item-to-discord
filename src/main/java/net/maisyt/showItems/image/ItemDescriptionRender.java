@@ -15,11 +15,15 @@ public class ItemDescriptionRender extends ImageRender<SingleItemInfo> {
     private static final int FONT_SIZE = 16;
     private static final int FONT_SHIFT = FONT_SIZE/4;
     private static final int MARGIN = 4;
-    private static final int DESCRIPTION_IMAGE_WIDTH = 350; // todo: make this configurable
+    private static int DESCRIPTION_IMAGE_WIDTH = 350;
     private static final int BACKGROUND_FRAME_SHIFT = 1;
 
 
     private SingleItemInfo singleItemInfo;
+
+    public static void setWidth(int width){
+        DESCRIPTION_IMAGE_WIDTH = width;
+    }
 
     public ItemDescriptionRender(SingleItemInfo singleItemInfo) {
         this.singleItemInfo = singleItemInfo;

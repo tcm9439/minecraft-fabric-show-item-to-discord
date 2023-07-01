@@ -31,6 +31,7 @@ public abstract class ImageRender<T> {
         }
         // fontName is nullable
         font = new Font(fontName, Font.PLAIN, 16);
+        ShowItemsMod.LOGGER.debug("Using font {} (expected: {}).", font.getName(), fontName);
     }
 
     public static void init(){

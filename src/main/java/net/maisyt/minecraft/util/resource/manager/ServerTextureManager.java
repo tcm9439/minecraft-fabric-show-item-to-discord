@@ -72,7 +72,7 @@ public class ServerTextureManager {
     }
 
     public static void reload(List<Path> pathToResourcePackPaths){
-        if (instance.resourcePackPaths.equals(pathToResourcePackPaths)){
+        if (instance != null && instance.resourcePackPaths.equals(pathToResourcePackPaths)){
             // no need to reload
             return;
         }

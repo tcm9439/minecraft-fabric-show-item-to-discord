@@ -21,7 +21,7 @@ class ItemDescriptionRenderTest {
         RenderTestHelper.setupResourceManager();
         ServerLanguageManager.init("zh_tw",
                 ServerLanguageManagerTest.loadPath(ServerLanguageManagerTest.ZIP_WITHOUT_OUTER, ServerLanguageManagerTest.ZIP_OF_PANGU));
-        ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getFont());
+        ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getImageConfig().getFont());
     }
 
     @Test

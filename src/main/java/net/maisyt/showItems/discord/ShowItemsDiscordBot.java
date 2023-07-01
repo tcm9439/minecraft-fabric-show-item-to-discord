@@ -34,6 +34,12 @@ public class ShowItemsDiscordBot {
         return instance;
     }
 
+    public static void shutdown(){
+        if (instance != null){
+            instance.disconnect();
+        }
+    }
+
     public ShowItemsDiscordBot(){
         channelID = ShowItemsConfigManager.getModConfig().getDiscordBot().getChannelId();
         token = ShowItemsConfigManager.getModConfig().getDiscordBot().getServerToken();

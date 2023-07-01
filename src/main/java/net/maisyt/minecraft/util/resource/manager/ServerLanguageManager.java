@@ -39,7 +39,7 @@ public class ServerLanguageManager {
     }
 
     static public void reload(String language, List<Path> languagePackPaths){
-        if (language.equals(instance.languageCode) && languagePackPaths.equals(instance.resourcePacks.stream().map(Resource::getPath).toList())){
+        if (instance != null && language.equals(instance.languageCode) && languagePackPaths.equals(instance.resourcePacks.stream().map(Resource::getPath).toList())){
             return;
         }
         init(language, languagePackPaths);

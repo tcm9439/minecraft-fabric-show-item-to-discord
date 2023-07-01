@@ -17,7 +17,10 @@
   },
   "message": {
     "mode": "text",
-    "font": "PingFang",
+    "image": {
+      "font": "PingFang",
+      "itemDescriptionImageWidth": 350
+    },
     "startMessage": {
       "embedColor": "#61de2a",
       "message": "Show item bot is now online!"
@@ -30,10 +33,6 @@
       "embedColor": "#1260cc",
       "title": "${PlayerName}'s Item",
       "includeTooltips": true
-    },
-    "showInventoryMessage": {
-      "embedColor": "#1260cc",
-      "title": "${PlayerName}'s Inventory"
     }
   }
 }

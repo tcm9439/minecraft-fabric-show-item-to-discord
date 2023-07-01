@@ -4,6 +4,7 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.maisyt.showItems.command.GenerateDefaultConfigCommand;
 import net.maisyt.showItems.command.ReloadCommand;
+import net.maisyt.showItems.command.ShutdownCommand;
 
 /**
  * Init on physical server only
@@ -19,5 +20,6 @@ public class ShowItemsServerMod implements DedicatedServerModInitializer {
     public void registerServerCommand() {
         CommandRegistrationCallback.EVENT.register(ReloadCommand::register);
         CommandRegistrationCallback.EVENT.register(GenerateDefaultConfigCommand::register);
+        CommandRegistrationCallback.EVENT.register(ShutdownCommand::register);
     }
 }

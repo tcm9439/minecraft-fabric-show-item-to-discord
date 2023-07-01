@@ -24,12 +24,12 @@ public interface OnChatMsgMixin {
 
         String msgContent = message.getContent().getString();
         ShowItemsMsgType msgType;
-        if (msgContent.equals("[item]")){
+        if (msgContent.equals("[i]")) {
             msgType = ShowItemsMsgType.SHOW_ITEM_IN_HAND;
             ShowItemsMod.LOGGER.trace("Got item msg");
-        } else if (msgContent.equals("[inv]")){
-            msgType = ShowItemsMsgType.SHOW_INVENTORY;
-            ShowItemsMod.LOGGER.trace("Got inv msg");
+//        } else if (msgContent.equals("[inv]")){
+//            msgType = ShowItemsMsgType.SHOW_INVENTORY;
+//            ShowItemsMod.LOGGER.trace("Got inv msg");
         } else {
             return;
         }

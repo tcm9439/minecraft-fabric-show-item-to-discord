@@ -11,6 +11,7 @@ import net.maisyt.showItems.discord.ShowItemsDiscordBot;
 import net.fabricmc.api.ModInitializer;
 
 import net.maisyt.showItems.image.ImageRender;
+import net.maisyt.showItems.image.ItemDescriptionRender;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -18,6 +19,7 @@ import net.minecraft.util.profiler.Profiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -58,7 +60,8 @@ public class ShowItemsMod implements ModInitializer {
                 for (String resource : resources.keySet()) {
                     try {
                         LOGGER.info("Loading resource: {}", resource);
-                        resources.put(resource, manager.getResource(new Identifier(MOD_ID, resource)).orElseThrow().getInputStream());
+                        InputStream streamFromModJar = manager.getResource(new Identifier(MOD_ID, resource)).orElseThrow().getInputStream();
+                        resources.put(resource, new BufferedInputStream(streamFromModJar));
                     } catch (IOException e) {
                         LOGGER.error("Failed to load resource: {}", resource, e);
                     }
@@ -108,15 +111,20 @@ public class ShowItemsMod implements ModInitializer {
                     // init texture packs if in image mode
                     if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
                         ServerTextureManager.init(ShowItemsConfigManager.getModConfig().getTexturePackPaths());
-                        ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getFont());
                     }
 
-                    // reload language packs
+                    // init language packs
                     ServerLanguageManager.init(ShowItemsConfigManager.getModConfig().getLanguage(),
                             ShowItemsConfigManager.getModConfig().getLanguagePackPaths());
                 }
+
+                // === common stuff to set in both reload / init ===
+                if (ShowItemsConfigManager.getModConfig().getMessage().getMode() == MessageMode.IMAGE){
+                    ImageRender.init(ShowItemsConfigManager.getModConfig().getFontPaths(), ShowItemsConfigManager.getModConfig().getMessage().getImageConfig().getFont());
+                    ItemDescriptionRender.setWidth(ShowItemsConfigManager.getModConfig().getMessage().getImageConfig().getItemDescriptionImageWidth());
+                }
             } else {
-                ShowItemsMod.LOGGER.debug("Discord bot is disabled.");
+                ShowItemsMod.LOGGER.debug("Discord bot is disabled due to invalid status.");
             }
         } catch (Exception e){
             ShowItemsMod.LOGGER.error("Error when init Show Items Mod: {}. Disable mod.", e.getMessage(), e);
@@ -125,13 +133,18 @@ public class ShowItemsMod implements ModInitializer {
     }
 
     public static void shutdownMod(){
+        ShowItemsConfigManager.disable();
+
         try {
-            if (ShowItemsConfigManager.isEnable()){
-                ShowItemsDiscordBot.getInstance().disconnect();
-                ShowItemsMsgHandler.shutdown();
-            }
+            ShowItemsMsgHandler.shutdown();
         } catch (Exception e){
-            ShowItemsMod.LOGGER.error("Error when shutdown Show Items Mod: {}", e.getMessage(), e);
+            ShowItemsMod.LOGGER.error("Error when shutdown ShowItemsMsgHandler: {}", e.getMessage(), e);
+        }
+
+        try {
+            ShowItemsDiscordBot.shutdown();
+        } catch (Exception e){
+            ShowItemsMod.LOGGER.error("Error when shutdown ShowItemsDiscordBot: {}", e.getMessage(), e);
         }
     }
 

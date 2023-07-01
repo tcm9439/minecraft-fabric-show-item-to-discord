@@ -28,11 +28,16 @@ public class ShowItemsConfigManager {
         enable = false;
     }
 
+    static public void enable(){
+        enable = true;
+    }
+
     static public Path getConfigFilePath(){
         return PathUtil.getGlobalConfigDirectory().resolve(ShowItemsConfigManager.CONFIG_FILE_NAME);
     }
 
     static public void loadConfig(){
+        enable();
         loadConfig(getConfigFilePath(), path -> PathUtil.getGameRootDirectory().resolve(path));
     }
 
@@ -53,7 +58,7 @@ public class ShowItemsConfigManager {
             ShowItemsMod.LOGGER.debug("Config file loaded.");
         } catch (IOException e){
             modConfig = null;
-            enable = false;
+            disable();
             ShowItemsMod.LOGGER.error("Error when loading config. Disable mod as can't connect to discord anyway. " +
                     "Try to add a valid config and reload it with command.", e);
         }
@@ -71,7 +76,13 @@ public class ShowItemsConfigManager {
             Path configPath = getConfigFilePath();
 
             if (overwrite || !configPath.toFile().exists()){
+                ShowItemsMod.LOGGER.info("Generating default config file to {}.", configPath.toAbsolutePath());
+                defaultConfig.mark(9216); // 9KB
                 Files.copy(defaultConfig, configPath, REPLACE_EXISTING);
+
+                // reset the stream as the Files.copy will go to end of stream
+                // without reset, the copied file will be empty when this function is called twice
+                defaultConfig.reset();
             } else {
                 return false;
             }
@@ -80,8 +91,6 @@ public class ShowItemsConfigManager {
         }
         return true;
     }
-
-
 
     public static ShowItemsModConfig getModConfig() {
         return modConfig;
