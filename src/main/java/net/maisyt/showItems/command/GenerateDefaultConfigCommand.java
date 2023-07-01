@@ -31,9 +31,9 @@ public class GenerateDefaultConfigCommand {
         boolean overrideIfExists = BoolArgumentType.getBool(context, OVERRIDE_IF_EXISTS_PARAM);
         boolean success = ShowItemsConfigManager.generateDefaultConfig(overrideIfExists);
         if (success){
-            context.getSource().sendFeedback(Text.literal("Create / override config file with the template successfully"), true);
+            context.getSource().sendFeedback(() -> Text.literal("Create / override config file with the template successfully"), true);
         } else {
-            context.getSource().sendFeedback(Text.literal("Failed to create / override config file wit the template. Probably the file exists and override_if_exists is disable"), true);
+            context.getSource().sendFeedback(() -> Text.literal("Failed to create / override config file wit the template. Probably the file exists and override_if_exists is disable"), true);
         }
         return Command.SINGLE_SUCCESS;
     }

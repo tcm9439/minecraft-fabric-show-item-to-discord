@@ -25,7 +25,7 @@
     ]
   },
   "mixins": [
-    "show-items-fabric-1.19.3.mixins.json"
+    "show-items-fabric-1.20.1.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.9",

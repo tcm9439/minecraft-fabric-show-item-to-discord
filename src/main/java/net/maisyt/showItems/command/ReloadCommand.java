@@ -25,7 +25,7 @@ public class ReloadCommand {
 
     public static int run(CommandContext<ServerCommandSource> context){
         ShowItemsMod.reloadMod();
-        context.getSource().sendFeedback(Text.literal("Reloaded show-item-to-discord."), true);
+        context.getSource().sendFeedback(() -> Text.literal("Reloaded show-item-to-discord."), true);
         return Command.SINGLE_SUCCESS;
     }
 }

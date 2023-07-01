@@ -25,7 +25,7 @@ public class ShutdownCommand {
 
     public static int run(CommandContext<ServerCommandSource> context){
         ShowItemsMod.shutdownMod();
-        context.getSource().sendFeedback(Text.literal("Shutdown show-item-to-discord."), true);
+        context.getSource().sendFeedback(() -> Text.literal("Shutdown show-item-to-discord."), true);
         return Command.SINGLE_SUCCESS;
     }
 }
