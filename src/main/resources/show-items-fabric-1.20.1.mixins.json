@@ -4,8 +4,7 @@
   "package": "net.maisyt.showItems.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ServerMixin",
-    "OnChatMsgMixin"
+    "ServerMixin"
   ],
   "client": [
   ],
