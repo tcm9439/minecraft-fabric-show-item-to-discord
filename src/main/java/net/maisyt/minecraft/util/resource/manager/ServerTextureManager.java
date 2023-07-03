@@ -144,42 +144,66 @@ public class ServerTextureManager {
             while (reader.hasNext()){
                 switch (reader.nextName()) {
                     case "overrides":
+                        ShowItemsMod.LOGGER.trace("Found overrides.");
                         reader.beginArray();
                         while (reader.hasNext()){
                             reader.beginObject();
                             // e.g. { "predicate": { "custom_model_data": 1 }, "model": "panling:item/ldl" },
-                            if (reader.nextName().equals("predicate")){
-                                reader.beginObject();
-                                if (reader.nextName().equals("custom_model_data")) {
-                                    int thisCustomModelData = reader.nextInt();
-//                                    ShowItemsMod.LOGGER.trace("Checking custom model data: {}", thisCustomModelData);
-                                    reader.endObject();
-                                    reader.nextName(); // model
-                                    String textureId = reader.nextString();
+                            // e.g. { "predicate": { "custom_model_data": 1, "pulling" : xx }, "model": "panling:item/ldl" },
+                            // e.g. { "predicate": { "pulling" : xx }, "model": "panling:item/ldl" },
 
-                                    if (thisCustomModelData == customModelData) {
-                                        ShowItemsMod.LOGGER.trace("Found custom model data: {} | {}", thisCustomModelData, textureId);
-                                        return textureId;
-                                    } else if (thisCustomModelData < customModelData) {
-//                                        ShowItemsMod.LOGGER.trace("Potential custom model data: {} | {}", thisCustomModelData, textureId);
-                                        candidateTextureId = textureId;
-                                    } else {
-                                        ShowItemsMod.LOGGER.trace("Custom model data {} is too large, skipping.", thisCustomModelData);
-                                        if (candidateTextureId != null) {
-                                            ShowItemsMod.LOGGER.trace("Using candidate texture id: {}", candidateTextureId);
-                                            return candidateTextureId;
-                                        } else {
-                                            return null;
+                            int thisCustomModelData = 0;
+                            boolean checkModel = false;
+                            while (reader.hasNext()){
+                                String predicateOrModelName = reader.nextName();
+                                switch (predicateOrModelName){
+                                    case "predicate":
+                                        reader.beginObject();
+                                        while (reader.hasNext()){
+                                            String name = reader.nextName();
+                                            ShowItemsMod.LOGGER.trace("Name {}", name);
+                                            if (name.equals("custom_model_data")) {
+                                                checkModel = true;
+                                                thisCustomModelData = reader.nextInt();
+                                                ShowItemsMod.LOGGER.trace("Checking custom model data: {}", thisCustomModelData);
+                                            } else {
+                                                reader.skipValue();
+                                            }
                                         }
-                                    }
+                                        reader.endObject();
+                                        break;
+                                    case "model":
+                                        if (!checkModel) {
+                                            ShowItemsMod.LOGGER.trace("Skip this model.");
+                                            reader.skipValue();
+                                            break;
+                                        }
+
+                                        String textureId = reader.nextString();
+                                        if (thisCustomModelData == customModelData) {
+                                            ShowItemsMod.LOGGER.trace("Found custom model data: {} | {}", thisCustomModelData, textureId);
+                                            return textureId;
+                                        } else if (thisCustomModelData < customModelData) {
+                                            candidateTextureId = textureId;
+                                        } else {
+                                            ShowItemsMod.LOGGER.trace("Custom model data {} is too large, skipping.", thisCustomModelData);
+                                            if (candidateTextureId != null) {
+                                                ShowItemsMod.LOGGER.trace("Using candidate texture id: {}", candidateTextureId);
+                                                return candidateTextureId;
+                                            } else {
+                                                return null;
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        reader.skipValue();
+                                        break;
                                 }
                             }
                             reader.endObject();
                         }
                         reader.endArray();
                         break;
-                    case "parent":
-                    case "textures":
                     default:
                         reader.skipValue();
                         break;

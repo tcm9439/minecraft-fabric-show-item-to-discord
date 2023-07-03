@@ -84,4 +84,12 @@ public class ServerTextureManagerTest {
         expected = "panling:item/furnace6";
         assertEquals(expected, result);
     }
+
+    @Test
+    void getTextureIdFromModel2() throws FileNotFoundException {
+        InputStream inputStream = new FileInputStream("src/test/resources/bow.json");
+        String result = ServerTextureManager.getTextureIdFromModel(inputStream, 20);
+        String expected = "panling:item/bow2";
+        assertEquals(expected, result);
+    }
 }
