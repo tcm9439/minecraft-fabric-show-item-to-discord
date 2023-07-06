@@ -1,9 +1,10 @@
 package net.maisyt.showItems.core;
 
+import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.GuildMessageChannel;
 import net.maisyt.showItems.ShowItemsMod;
 import net.maisyt.showItems.config.MessageMode;
 import net.maisyt.showItems.config.ShowItemsConfigManager;
-import net.maisyt.showItems.config.ShowItemsModConfig;
 import net.maisyt.showItems.discord.ShowItemsDiscordBot;
 import net.maisyt.showItems.message.ShowItemsMsgType;
 import net.maisyt.showItems.message.itemInfo.IItemsInfoExtractor;
@@ -12,11 +13,8 @@ import net.maisyt.showItems.message.itemInfo.SingleItemInfoExtractor;
 import net.maisyt.showItems.message.renderer.IItemsMessageRenderer;
 import net.maisyt.showItems.message.renderer.SingleItemImageMessageRenderer;
 import net.maisyt.showItems.message.renderer.SingleItemTextMessageRenderer;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.channel.GuildMessageChannel;
 import net.minecraft.server.network.ServerPlayerEntity;
 import reactor.core.publisher.Mono;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
@@ -55,8 +53,8 @@ public class ShowItemsMsgHandler {
 
         executor.execute(() -> {
             // extract item info
-            IItemsInfoExtractor itemInfoExtractor = null;
-            IItemsMessageRenderer messageRenderer = null;
+            IItemsInfoExtractor itemInfoExtractor;
+            IItemsMessageRenderer messageRenderer;
 
             MessageMode messageMode = ShowItemsConfigManager.getModConfig().getMessage().getMode();
             switch (msgType){
@@ -79,6 +77,7 @@ public class ShowItemsMsgHandler {
 
             if (itemInfo == ItemsInfo.AIR){
                 // do nothing if player is holding nothing
+                ShowItemsMod.LOGGER.info("Player is holding nothing, skip message.");
                 return;
             }
 

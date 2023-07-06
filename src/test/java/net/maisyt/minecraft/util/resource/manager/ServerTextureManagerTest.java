@@ -91,5 +91,15 @@ public class ServerTextureManagerTest {
         String result = ServerTextureManager.getTextureIdFromModel(inputStream, 20);
         String expected = "panling:item/bow2";
         assertEquals(expected, result);
+
+        inputStream = new FileInputStream("src/test/resources/bow.json");
+        result = ServerTextureManager.getTextureIdFromModel(inputStream, 40);
+        expected = "panling:item/bow4";
+        assertEquals(expected, result);
+
+        inputStream = new FileInputStream("src/test/resources/bow.json");
+        result = ServerTextureManager.getTextureIdFromModel(inputStream, 60);
+        expected = "panling:item/bow6";
+        assertEquals(expected, result);
     }
 }

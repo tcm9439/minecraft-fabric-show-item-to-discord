@@ -6,9 +6,7 @@ import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.maisyt.showItems.command.GenerateDefaultConfigCommand;
 import net.maisyt.showItems.command.ReloadCommand;
 import net.maisyt.showItems.command.ShutdownCommand;
-import net.maisyt.showItems.config.ShowItemsConfigManager;
-import net.maisyt.showItems.core.ShowItemsMsgHandler;
-import net.maisyt.showItems.message.ShowItemsMsgType;
+import net.maisyt.showItems.core.ServerOnChatMessage;
 
 /**
  * Init on physical server only
@@ -23,25 +21,7 @@ public class ShowItemsServerMod implements DedicatedServerModInitializer {
     }
 
     public void registerEvent() {
-        ServerMessageEvents.CHAT_MESSAGE.register((message, player, param) -> {
-            ShowItemsMod.LOGGER.trace("Got message: " + message);
-            if (!ShowItemsConfigManager.isEnable()){
-                ShowItemsMod.LOGGER.info("ShowItems is disabled. Skip message.");
-                // is not enabled, do nothing
-                return;
-            }
-
-            String msgContent = message.getContent().getString();
-            ShowItemsMsgType msgType;
-            if (msgContent.contains("[i]")) {
-                msgType = ShowItemsMsgType.SHOW_ITEM_IN_HAND;
-                ShowItemsMod.LOGGER.trace("Got item msg");
-            } else {
-                return;
-            }
-
-            ShowItemsMsgHandler.handleMessage(player, msgType);
-        });
+        ServerMessageEvents.CHAT_MESSAGE.register(ServerOnChatMessage::onChatMessage);
     }
 
     public void registerServerCommand() {
