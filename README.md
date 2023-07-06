@@ -109,7 +109,8 @@ A full example at [here](./README/show-items-config.json).
 
 ## Support version
 Fabric
-- 1.19.3 (master)
+- 1.19.3 (has some minor bugs) 
+- 1.20.1 (master)
 
 ## Debug log
 If you face any problem, it is a good idea to turn on the debug log.
