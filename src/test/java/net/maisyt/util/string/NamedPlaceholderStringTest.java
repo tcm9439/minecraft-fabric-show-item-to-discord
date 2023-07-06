@@ -16,17 +16,16 @@ class NamedPlaceholderStringTest {
         NamedPlaceholderString chineseStringToSubstitute =
                 new NamedPlaceholderString("安安，${Name}。我是${Robot}。");
 
-         Map<String, String> values = new HashMap<>();
-         values.put("Name", "Klein");
-         values.put("Robot", "bot-Y17");
+        Map<String, String> values = new HashMap<>();
+        values.put("Name", "Klein");
+        values.put("Robot", "bot-Y17");
 
-         String expected = "Hello Klein. Here is bot-Y17. Can I call you Klein?";
-         String result = stringToSubstitute.format(values);
-         assertEquals(expected, result);
+        String expected = "Hello Klein. Here is bot-Y17. Can I call you Klein?";
+        String result = stringToSubstitute.format(values);
+        assertEquals(expected, result);
 
-         expected = "安安，Klein。我是bot-Y17。";
-         result = chineseStringToSubstitute.format(values);
-         assertEquals(expected, result);
-
+        expected = "安安，Klein。我是bot-Y17。";
+        result = chineseStringToSubstitute.format(values);
+        assertEquals(expected, result);
     }
 }

@@ -4,6 +4,7 @@ import net.fabricmc.loader.impl.lib.gson.JsonReader;
 import net.maisyt.minecraft.util.resource.Resource;
 import net.maisyt.minecraft.util.resource.ResourceFactory;
 import net.maisyt.showItems.ShowItemsMod;
+import net.maisyt.showItems.ShowItemsServerMod;
 import net.minecraft.util.Identifier;
 
 import javax.imageio.ImageIO;

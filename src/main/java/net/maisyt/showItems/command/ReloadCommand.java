@@ -1,6 +1,6 @@
 package net.maisyt.showItems.command;
 
-import net.maisyt.showItems.ShowItemsMod;
+import net.maisyt.showItems.ShowItemsServerMod;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -24,7 +24,7 @@ public class ReloadCommand {
     }
 
     public static int run(CommandContext<ServerCommandSource> context){
-        ShowItemsMod.reloadMod();
+        ShowItemsServerMod.reloadMod();
         context.getSource().sendFeedback(() -> Text.literal("Reloaded show-item-to-discord."), true);
         return Command.SINGLE_SUCCESS;
     }

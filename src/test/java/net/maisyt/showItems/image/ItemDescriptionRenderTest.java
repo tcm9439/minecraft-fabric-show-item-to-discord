@@ -9,9 +9,7 @@ import net.maisyt.showItems.message.itemInfo.SingleItemInfoTestHelper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 class ItemDescriptionRenderTest {

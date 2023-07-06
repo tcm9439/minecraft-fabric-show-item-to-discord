@@ -15,8 +15,6 @@ import net.maisyt.showItems.message.renderer.SingleItemImageMessageRenderer;
 import net.maisyt.showItems.message.renderer.SingleItemTextMessageRenderer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import reactor.core.publisher.Mono;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 /**
@@ -24,34 +22,30 @@ import java.util.function.Function;
  * Pushing the job to thread pool as getting resource & render image & send it out may take some time.
  * (Single thread, so I don't have to worry about thread safety at least for now.)
  */
-public class ShowItemsMsgHandler {
-    static public ExecutorService executor = Executors.newSingleThreadExecutor();
+public class ShowItemsMsgHandler extends Handler {
+    /**
+     * Use a independent thread pool for message handling as image rendering may take some time.
+     */
+    static public JobPool myJobPool = new JobPool();
+    static public ShowItemsMsgHandler INSTANCE = new ShowItemsMsgHandler();
 
-    public static void shutdown(){
-        if (executor != null && !executor.isShutdown()){
-            executor.shutdown();
-            if (!executor.isShutdown()){
-                try {
-                    Thread.sleep(1500);
-                    executor.shutdownNow();
-                } catch (InterruptedException e) {
-                }
-            }
-        }
+    @Override
+    public void shutdown(){
+        myJobPool.shutdown();
     }
 
-    public static void restart(){
-        shutdown();
-        executor = Executors.newSingleThreadExecutor();
+    @Override
+    public void reload(){
+        myJobPool.reload();
     }
 
-    static public void handleMessage(ServerPlayerEntity sender, ShowItemsMsgType msgType){
-        if (executor.isShutdown()){
+    public void handleMessage(ServerPlayerEntity sender, ShowItemsMsgType msgType){
+        if (myJobPool.isShutdown()){
             ShowItemsMod.LOGGER.warn("Executor is shutdown, cannot handle message");
             return;
         }
 
-        executor.execute(() -> {
+        myJobPool.submit(() -> {
             // extract item info
             IItemsInfoExtractor itemInfoExtractor;
             IItemsMessageRenderer messageRenderer;
@@ -66,9 +60,6 @@ public class ShowItemsMsgHandler {
                         messageRenderer = new SingleItemTextMessageRenderer();
                     }
                     break;
-//                case SHOW_INVENTORY:
-//                    itemInfo = ItemInfoExtractor.(sender);
-//                    break;
                 default:
                     return;
             }

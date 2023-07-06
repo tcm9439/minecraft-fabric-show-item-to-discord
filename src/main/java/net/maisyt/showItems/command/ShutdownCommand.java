@@ -3,7 +3,7 @@ package net.maisyt.showItems.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import net.maisyt.showItems.ShowItemsMod;
+import net.maisyt.showItems.ShowItemsServerMod;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -24,7 +24,7 @@ public class ShutdownCommand {
     }
 
     public static int run(CommandContext<ServerCommandSource> context){
-        ShowItemsMod.shutdownMod();
+        ShowItemsServerMod.shutdownMod();
         context.getSource().sendFeedback(() -> Text.literal("Shutdown show-item-to-discord."), true);
         return Command.SINGLE_SUCCESS;
     }

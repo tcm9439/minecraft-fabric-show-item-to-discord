@@ -3,6 +3,7 @@ package net.maisyt.showItems.config;
 import net.maisyt.minecraft.util.PathUtil;
 import net.maisyt.showItems.ShowItemsMod;
 import net.fabricmc.loader.impl.lib.gson.JsonReader;
+import net.maisyt.showItems.ShowItemsServerMod;
 
 import java.io.File;
 import java.io.FileReader;

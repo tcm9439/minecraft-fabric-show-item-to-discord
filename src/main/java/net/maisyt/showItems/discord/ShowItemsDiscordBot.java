@@ -4,6 +4,7 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.http.client.ClientException;
 import net.maisyt.showItems.ShowItemsMod;
+import net.maisyt.showItems.ShowItemsServerMod;
 import net.maisyt.showItems.config.MessageConfig;
 import net.maisyt.showItems.config.ShowItemsConfigManager;
 import discord4j.common.util.Snowflake;
@@ -106,10 +107,10 @@ public class ShowItemsDiscordBot {
                     .block();
         } catch (ClientException e){
             ShowItemsMod.LOGGER.error("Discord bot cannot log in, probably due to invalid channel id. | {}", e.getMessage(), e);
-            ShowItemsMod.shutdownMod();
+            ShowItemsServerMod.shutdownMod();
         } catch (Exception e){
             ShowItemsMod.LOGGER.error("Discord bot cannot send message to discord. Disable mod now. | {}", e.getMessage(), e);
-            ShowItemsMod.shutdownMod();
+            ShowItemsServerMod.shutdownMod();
         }
     }
 
