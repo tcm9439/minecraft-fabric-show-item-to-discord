@@ -5,7 +5,6 @@ import net.maisyt.minecraft.util.resource.manager.ServerLanguageManagerTest;
 import net.maisyt.minecraft.util.resource.manager.ServerTextureManager;
 import net.maisyt.minecraft.util.resource.manager.ServerTextureManagerTest;
 import net.maisyt.showItems.config.ShowItemsConfigLoaderTest;
-import net.maisyt.showItems.discord.ShowItemsDiscordBot;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -40,5 +39,17 @@ class TextTest {
                                 new TranslatableText("advancements.adventure.honey_block_slide.title"));
 
         assertEquals("MaisyT 已完成進度 [陷入膠著]", text.getFullDisplayString());
+    }
+
+    @Test
+    void testRenderTest2(){
+        Text text = Text.createText(SimpleText.create("%s got %s"),
+                SimpleText.create("MaisyT"),
+                SimpleText.create("[%s - %s]"),
+                SimpleText.create("SomeRandomAdvancement"),
+                SimpleText.create("level %s"),
+                SimpleText.create("2"));
+
+        assertEquals("MaisyT got [SomeRandomAdvancement - level 2]", text.getFullDisplayString());
     }
 }
