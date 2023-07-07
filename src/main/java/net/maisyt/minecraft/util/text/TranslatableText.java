@@ -9,6 +9,14 @@ public class TranslatableText extends Text {
     private final String translationKey;
     private SimpleText translated = null;
 
+    private String fallback = null;
+
+    public TranslatableText(String translationKey, String fallback, Formatting... format) {
+        super(format);
+        this.translationKey = translationKey;
+        this.fallback = fallback;
+    }
+
     public TranslatableText(String translationKey, Formatting... format) {
         super(format);
         this.translationKey = translationKey;
@@ -19,14 +27,32 @@ public class TranslatableText extends Text {
         this.translationKey = translationKey;
     }
 
+    public TranslatableText(String translationKey, String fallback, Style style) {
+        super(style);
+        this.translationKey = translationKey;
+        this.fallback = fallback;
+    }
+
     public void setTranslated() {
         String translatedString = ServerLanguageManager.getInstance().getTranslation(translationKey);
         if (translatedString != null){
             translated = extractStyleFromTextString(translatedString, getStyle(), getNextComponent());
             ShowItemsMod.LOGGER.trace("Translated & style extracted: {} -> {}", translatedString, translated);
         } else {
-            translated = SimpleText.create(translationKey);
+            if (fallback == null){
+                translated = SimpleText.create(translationKey);
+            } else {
+                translated = SimpleText.create(fallback);
+            }
         }
+    }
+
+    public String getFallback() {
+        return fallback;
+    }
+
+    public void setFallback(String fallback) {
+        this.fallback = fallback;
     }
 
     public SimpleText getTranslated() {

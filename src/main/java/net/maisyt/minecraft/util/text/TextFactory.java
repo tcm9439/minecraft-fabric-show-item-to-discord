@@ -3,8 +3,8 @@ package net.maisyt.minecraft.util.text;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.minecraft.text.Style;
-import net.minecraft.text.TextColor;
+import net.maisyt.showItems.ShowItemsMod;
+import net.minecraft.text.*;
 
 import java.util.List;
 import java.util.Map;
@@ -101,5 +101,41 @@ public class TextFactory {
         } else {
             return SimpleText.create(content, baseStyle);
         }
+    }
+
+    public static net.maisyt.minecraft.util.text.Text createTextFromMcText(net.minecraft.text.Text message) {
+        try {
+            net.maisyt.minecraft.util.text.Text myText;
+            if (message instanceof MutableText mutableTextMsg){
+                TextContent textContent = mutableTextMsg.getContent();
+                if (textContent instanceof LiteralTextContent literalTextContent){
+                    myText = SimpleText.create(literalTextContent.string());
+                } else if (textContent instanceof TranslatableTextContent translatableTextContent) {
+                    myText = new TranslatableText(translatableTextContent.getKey(), translatableTextContent.getFallback());
+
+                    for (Object arg : translatableTextContent.getArgs()){
+                        if (arg instanceof net.minecraft.text.Text textArg){
+                            net.maisyt.minecraft.util.text.Text myTextArg = createTextFromMcText(textArg);
+                            if (myTextArg != null){
+                                myText.appendComponentAtLast(myTextArg);
+                            }
+                        }
+                    }
+                } else {
+                    return null;
+                }
+
+                for (net.minecraft.text.Text siblingText : message.getSiblings()){
+                    net.maisyt.minecraft.util.text.Text mySiblingText = createTextFromMcText(siblingText);
+                    if (mySiblingText != null){
+                        myText.appendComponentAtLast(mySiblingText);
+                    }
+                }
+                return myText;
+            }
+        } catch (Exception e){
+            ShowItemsMod.LOGGER.error("Error on createTextFromMcText", e);
+        }
+        return null;
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 
 public class ServerOnChatMessage implements ServerMessageEvents.ChatMessage, ServerMessageEvents.GameMessage {
     static public ServerOnChatMessage INSTANCE = new ServerOnChatMessage();
@@ -47,12 +47,7 @@ public class ServerOnChatMessage implements ServerMessageEvents.ChatMessage, Ser
      * {@inheritDoc}
      */
     public void onGameMessage(MinecraftServer server, Text message, boolean overlay) {
-        // todo
-        // join / leave
-
-        // advancement
-
-        // death
-        ShowItemsMod.LOGGER.trace("Got game message \"{}\"", message);
+        ShowItemsMod.LOGGER.debug("Got game message: \"{}\"", message);
+        GameMsgHandler.INSTANCE.handleMessage(message);
     }
 }

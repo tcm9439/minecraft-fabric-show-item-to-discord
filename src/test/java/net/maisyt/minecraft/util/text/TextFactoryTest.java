@@ -70,4 +70,11 @@ class TextFactoryTest {
         Text text = TextFactory.createTextFromJsonNBT(jsonNBT, Style.EMPTY.withItalic(true));
         assertEquals("testing +7.1 -2 abc", text.getFullDisplayString());
     }
+
+    @Test
+    void createTextFromJsonNBT8(){
+        String jsonNBT = "[{\"text\":\"%2$s testing %1$s \"},{\"text\":\"First\"}, {\"text\":\"Second\"}, {\"text\":\"Last\"}]";
+        Text text = TextFactory.createTextFromJsonNBT(jsonNBT, Style.EMPTY.withItalic(true));
+        assertEquals("Second testing First Last", text.getFullDisplayString());
+    }
 }

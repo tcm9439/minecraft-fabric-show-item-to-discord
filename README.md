@@ -43,7 +43,7 @@ File path: (Sever side) `config/show-items-config.json`
 
 A full example at [here](./README/show-items-config.json).
 
-```json
+```
 {
   "language": "zh_tw", # the language for the translation
   "languagePackPath": [ 

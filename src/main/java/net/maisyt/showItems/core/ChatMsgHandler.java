@@ -15,10 +15,10 @@ public class ChatMsgHandler extends Handler {
             // render message
             String message = msgContent.replaceAll("\\\\", "\\\\\\\\");
             String messageToDiscord = String.format("<%s> %s", player, message);
-            Function<GuildMessageChannel, Mono<Message>> showItemMsg = ShowItemsDiscordBot.createSimpleTextMsgFunction(messageToDiscord);
+            Function<GuildMessageChannel, Mono<Message>> chatMsg = ShowItemsDiscordBot.createSimpleTextMsgFunction(messageToDiscord);
 
             // send message
-            ShowItemsDiscordBot.getInstance().sendMessageToDiscord(showItemMsg);
+            ShowItemsDiscordBot.getInstance().sendMessageToDiscord(chatMsg);
         });
     }
 }

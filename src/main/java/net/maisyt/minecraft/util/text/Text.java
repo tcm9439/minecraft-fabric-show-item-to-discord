@@ -6,6 +6,7 @@ import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * The getDisplayString() will return a string with placeholder (%s, %d, %1$s, etc.).
@@ -40,6 +41,14 @@ public abstract class Text {
 
     public Text getNextComponent() {
         return nextComponent;
+    }
+
+    public void appendComponentAtLast(Text componentToAppend){
+        Text lastComponent = this;
+        while (lastComponent.hasNextComponent()){
+            lastComponent = lastComponent.getNextComponent();
+        }
+        lastComponent.setNextComponent(componentToAppend);
     }
 
     /**
@@ -96,12 +105,19 @@ public abstract class Text {
     }
 
     public static boolean hasPlaceHolder(String thisDisplayString) {
-        return thisDisplayString.contains("%s");
+        return countPlaceHolder(thisDisplayString) > 0;
     }
 
     public static int countPlaceHolder(String thisDisplayString){
-        return thisDisplayString.length() -
-                thisDisplayString.replace("%s", " ").replace("%d", " ").length();
+        // https://stackoverflow.com/questions/28133103/how-do-i-count-the-number-of-format-characters-in-a-string
+        Pattern formatter = Pattern.compile( "(?!<%)%" +
+                "(?:(\\d+)\\$)?" +
+                "([-#+ 0,(]|<)?" +
+                "\\d*" +
+                "(?:\\.\\d+)?" +
+                "(?:[bBhHsScCdoxXeEfgGaAtT]|" +
+                "[tT][HIklMSLNpzZsQBbhAaCYyjmdeRTrDFc])");
+        return (int) formatter.matcher(thisDisplayString).results().count();
     }
 
     public int getPlaceholderCount(){
