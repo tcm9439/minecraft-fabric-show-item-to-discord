@@ -46,5 +46,9 @@ public class ShowItemsConfigLoaderTest {
         assertEquals("Show item bot is now online!" ,messageConfig.getStartMessage().getMessage());
         assertEquals("我先下囉，拜～" ,messageConfig.getStopMessage().getMessage());
         assertEquals("${PlayerName}'s Item" ,messageConfig.getShowSingleItemMessage().getTitle().getStringWithPlaceholders());
+        assertFalse(messageConfig.getMoreMessage().isShowChat());
+        assertFalse(messageConfig.getMoreMessage().isShowAdvancement());
+        assertFalse(messageConfig.getMoreMessage().isShowPlayerJoinLeave());
+        assertTrue(messageConfig.getMoreMessage().isShowDeath());
     }
 }

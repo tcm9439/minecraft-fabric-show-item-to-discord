@@ -40,11 +40,6 @@ public class ShowItemsMsgHandler extends Handler {
     }
 
     public void handleMessage(ServerPlayerEntity sender, ShowItemsMsgType msgType){
-        if (myJobPool.isShutdown()){
-            ShowItemsMod.LOGGER.warn("Executor is shutdown, cannot handle message");
-            return;
-        }
-
         myJobPool.submit(() -> {
             // extract item info
             IItemsInfoExtractor itemInfoExtractor;

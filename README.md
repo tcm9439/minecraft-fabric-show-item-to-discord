@@ -15,6 +15,8 @@ Example:
 An item from a RPG map [盤靈古域](http://pan-gu-continent.blogspot.com/) and its MC-version-upgraded version [夢回盤靈](https://search.mcbbs.net/forum.php?mod=viewthread&tid=1116615&extra=page%3D1&page=1).
 ![](./README/item-message-example.png)
 
+On the other hand, there is support to send "chat message" and TRANSLATED "game message (player join / leave, death, get advancement)" to Discord. They are disable by default. You can turn them on in the config.
+
 ## How to starts?
 1. Put the mod to a Fabric server.
 2. Start the server. A config temple should show up in the config directory. If it is missing, use the command to generate one.
@@ -102,6 +104,13 @@ A full example at [here](./README/show-items-config.json).
         "embedColor": "#1260cc",
         "title": "${PlayerName} item",
         "includeTooltips": true # to include the tooltip/lore or not
+    },
+    "moreMessage": {
+        # you can choose to show more message to Discord
+        "chat": false,
+        "playerJoinLeave": false,
+        "advancement": false,
+        "death": false
     }
   }
 }

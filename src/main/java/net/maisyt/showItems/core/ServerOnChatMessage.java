@@ -47,7 +47,15 @@ public class ServerOnChatMessage implements ServerMessageEvents.ChatMessage, Ser
      * {@inheritDoc}
      */
     public void onGameMessage(MinecraftServer server, Text message, boolean overlay) {
-        ShowItemsMod.LOGGER.debug("Got game message: \"{}\"", message);
-        GameMsgHandler.INSTANCE.handleMessage(message);
+        try {
+            ShowItemsMod.LOGGER.debug("Got game message: \"{}\"", message);
+            if (ShowItemsConfigManager.isEnable()){
+                GameMsgHandler.INSTANCE.handleMessage(message);
+            } else {
+                ShowItemsMod.LOGGER.info("ShowItems is disabled. Skip message.");
+            }
+        } catch (Exception e){
+            ShowItemsMod.LOGGER.error("Error on handle game message", e);
+        }
     }
 }

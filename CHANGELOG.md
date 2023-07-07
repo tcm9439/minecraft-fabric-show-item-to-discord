@@ -16,3 +16,12 @@ First release version.
 Fix:
 - Won't show other players item in Discord anymore.
 - Better reader for the item model json file.
+
+## 0.2.0 
+Minecraft version: 1.20.1
+Know issue: NA
+
+Support more type of message to Discord.
+
+Fix:
+- Some text rendering bugs

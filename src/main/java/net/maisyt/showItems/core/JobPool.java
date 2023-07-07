@@ -1,6 +1,7 @@
 package net.maisyt.showItems.core;
 
 import net.maisyt.minecraft.util.resource.ModManagedResource;
+import net.maisyt.showItems.ShowItemsMod;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,6 +10,7 @@ public class JobPool implements ModManagedResource {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public void shutdown(){
+        ShowItemsMod.LOGGER.info("Shutdown JobPool");
         if (executor != null && !executor.isShutdown()){
             executor.shutdown();
             if (!executor.isShutdown()){
@@ -22,6 +24,7 @@ public class JobPool implements ModManagedResource {
     }
 
     public void reload(){
+        ShowItemsMod.LOGGER.info("Reloading JobPool");
         shutdown();
         executor = Executors.newSingleThreadExecutor();
     }

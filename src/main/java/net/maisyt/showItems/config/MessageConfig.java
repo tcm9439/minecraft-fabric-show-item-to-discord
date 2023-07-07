@@ -74,14 +74,14 @@ public class MessageConfig {
         }
     }
 
-    public class showSingleItemMessageConfig {
+    public class ShowSingleItemMessageConfig {
         Color embedColor = Color.GRAY;
         NamedPlaceholderString title = new NamedPlaceholderString("${PlayerName}'s Item");
         boolean includeTooltip = false;
 
-        public showSingleItemMessageConfig() {}
+        public ShowSingleItemMessageConfig() {}
 
-        public showSingleItemMessageConfig(JsonReader reader) throws IOException {
+        public ShowSingleItemMessageConfig(JsonReader reader) throws IOException {
             reader.beginObject();
             while (reader.hasNext()) {
                 String name = reader.nextName();
@@ -113,36 +113,43 @@ public class MessageConfig {
         }
     }
 
-    public class showInventoryMessageConfig {
-        Color embedColor = Color.GRAY;
-        NamedPlaceholderString title = new NamedPlaceholderString("${PlayerName}'s Inventory");
+    public class MoreMessageConfig {
+        boolean showChat = false;
+        boolean showAdvancement = false;
+        boolean showDeath = false;
+        boolean showPlayerJoinLeave = false;
 
-        public showInventoryMessageConfig() {}
+        public boolean isShowChat() {
+            return showChat;
+        }
 
-        public showInventoryMessageConfig(JsonReader reader) throws IOException {
+        public boolean isShowAdvancement() {
+            return showAdvancement;
+        }
+
+        public boolean isShowDeath() {
+            return showDeath;
+        }
+
+        public boolean isShowPlayerJoinLeave() {
+            return showPlayerJoinLeave;
+        }
+
+        public MoreMessageConfig() {}
+
+        public MoreMessageConfig(JsonReader reader) throws IOException {
             reader.beginObject();
             while (reader.hasNext()) {
                 String name = reader.nextName();
                 switch (name) {
-                    case "embedColor" -> embedColor = getDiscordBotColor(reader.nextString(), embedColor);
-                    case "title" -> {
-                        String readTitle = reader.nextString();
-                        if (readTitle != null && readTitle.contains("${"+PLAYER_NAME_PLACEHOLDER+"}")){
-                            title = new NamedPlaceholderString(readTitle);
-                        }
-                    }
+                    case "chat" -> showChat = reader.nextBoolean();
+                    case "advancement" -> showAdvancement = reader.nextBoolean();
+                    case "death" -> showDeath = reader.nextBoolean();
+                    case "playerJoinLeave" -> showPlayerJoinLeave = reader.nextBoolean();
                     default -> reader.skipValue();
                 }
             }
             reader.endObject();
-        }
-
-        public Color getEmbedColor() {
-            return embedColor;
-        }
-
-        public NamedPlaceholderString getTitle() {
-            return title;
         }
     }
 
@@ -185,8 +192,8 @@ public class MessageConfig {
     private MessageMode mode = MessageMode.TEXT;
     private StartMessageConfig startMessage = new StartMessageConfig();
     private StopMessageConfig stopMessage = new StopMessageConfig();
-    private showSingleItemMessageConfig showSingleItemMessage = new showSingleItemMessageConfig();
-//    private showInventoryMessageConfig showInventoryMessage = new showInventoryMessageConfig();
+    private ShowSingleItemMessageConfig showSingleItemMessage = new ShowSingleItemMessageConfig();
+    private MoreMessageConfig moreMessage = new MoreMessageConfig();
     private ImageConfig imageConfig = new ImageConfig();
 
     public MessageConfig() {}
@@ -199,8 +206,8 @@ public class MessageConfig {
                 case "mode" -> setMode(MessageMode.valueOf(reader.nextString().toUpperCase()));
                 case "startMessage" -> setStartMessage(new StartMessageConfig(reader));
                 case "stopMessage" -> setStopMessage(new StopMessageConfig(reader));
-                case "showSingleItemMessage" -> setShowSingleItemMessage(new showSingleItemMessageConfig(reader));
-//                case "showInventoryMessage" -> setShowInventoryMessage(new showInventoryMessageConfig(reader));
+                case "showSingleItemMessage" -> setShowSingleItemMessage(new ShowSingleItemMessageConfig(reader));
+                case "moreMessage" -> setMoreMessage(new MoreMessageConfig(reader));
                 case "image" -> setImageConfig(new ImageConfig(reader));
                 default -> reader.skipValue();
             }
@@ -232,21 +239,21 @@ public class MessageConfig {
         this.stopMessage = stopMessage;
     }
 
-    public showSingleItemMessageConfig getShowSingleItemMessage() {
+    public ShowSingleItemMessageConfig getShowSingleItemMessage() {
         return showSingleItemMessage;
     }
 
-    public void setShowSingleItemMessage(showSingleItemMessageConfig showSingleItemMessage) {
+    public void setShowSingleItemMessage(ShowSingleItemMessageConfig showSingleItemMessage) {
         this.showSingleItemMessage = showSingleItemMessage;
     }
 
-//    public showInventoryMessageConfig getShowInventoryMessage() {
-//        return showInventoryMessage;
-//    }
-//
-//    public void setShowInventoryMessage(showInventoryMessageConfig showInventoryMessage) {
-//        this.showInventoryMessage = showInventoryMessage;
-//    }
+    public MoreMessageConfig getMoreMessage() {
+        return moreMessage;
+    }
+
+    public void setMoreMessage(MoreMessageConfig moreMessage) {
+        this.moreMessage = moreMessage;
+    }
 
     /**
      * Convert a color code to a discord4j Color object.

@@ -29,7 +29,7 @@ public class SingleItemImageMessageRenderer implements IItemsMessageRenderer {
         ShowItemsMod.LOGGER.debug("rendering single item message for {}", singleItemInfo);
 
         // get the message string from the config
-        MessageConfig.showSingleItemMessageConfig msgConfig = ShowItemsConfigManager.getModConfig().getMessage().getShowSingleItemMessage();
+        MessageConfig.ShowSingleItemMessageConfig msgConfig = ShowItemsConfigManager.getModConfig().getMessage().getShowSingleItemMessage();
 
         // title: player's item
         Map<String, String> placeholderValues = new HashMap<>();

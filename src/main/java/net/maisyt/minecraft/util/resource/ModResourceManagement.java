@@ -66,7 +66,7 @@ public class ModResourceManagement {
         for (ModManagedResource resource : managedResources) {
             resource.shutdown();
         }
-        managedResources.clear();
+//        managedResources.clear();
     }
 
     public void reload() {

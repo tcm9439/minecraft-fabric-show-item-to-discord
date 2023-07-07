@@ -32,6 +32,12 @@
       "embedColor": "#1260cc",
       "title": "${PlayerName}'s Item",
       "includeTooltips": true
+    },
+    "moreMessage": {
+      "chat": false,
+      "playerJoinLeave": false,
+      "advancement": false,
+      "death": true
     }
   }
 }
